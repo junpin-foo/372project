@@ -1,5 +1,6 @@
 # Authors
 Caleb Tong
+Jesse Huang
 
 
 # Getting Started with Create React App
