@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ setLoggedIn}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const backEndpoint = 'http://localhost:3001/'
 
@@ -16,6 +18,8 @@ const Login = () => {
     .then(response => {
 
       console.log('Login successful');
+      setLoggedIn(true)
+      navigate('/p');
     })
     .catch(error => {
 

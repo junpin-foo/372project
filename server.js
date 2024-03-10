@@ -34,10 +34,10 @@ app.post('/login', async(req,res) => {
     }
 })
 
-app.get('/logout', async(requ,resp)=>{
+app.post('/logout', async(req,res)=>{
     // Remove the session and login 
-    requ.session.destroy()
-    resp.redirect('/login')
+    req.session.destroy()
+    res.status(200).json({ message: 'Logout successful' }); 
 })
 
 app.listen(PORT, '0.0.0.0')
