@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
+import RankingsPage from './pages/RankingsPage';
 
 import './index.css';
 
@@ -14,6 +14,7 @@ root.render(
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/rankings" element={<RankingsPage />} />
             </Routes>
         </BrowserRouter>
     </React.StrictMode>

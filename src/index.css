@@ -23,3 +23,7 @@ body {
 .dashboard-header {
   grid-area: header;
 }
+
+.sidebar {
+  position: relative
+}
