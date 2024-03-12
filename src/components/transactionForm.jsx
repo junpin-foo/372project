@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 
 function TransactionForm() {
-  const [tickername, setTickername] = useState('');
+  const [tickerSymbol, setTickerSymbol] = useState('');
+  const [tickerClass, setTickerClass] = useState('');
+  const [tickerCurrency, setTickerCurrency] = useState('');
   const [quantity, setQuantity] = useState('');
   const [price, setPrice] = useState('');
   const [date, setDate] = useState('');
@@ -9,10 +11,11 @@ function TransactionForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // You can handle form submission here, e.g., send the data to an API or perform other actions
-    console.log('Form submitted:', { tickername, quantity, price, date });
+    // handle form submission here
     // Clear form fields after submission
-    setTickername('');
+    setTickerSymbol('');
+    setTickerClass('stocks');
+    setTickerCurrency('USD');
     setQuantity('');
     setPrice('');
     setDate('');
@@ -37,15 +40,44 @@ function TransactionForm() {
           </select>
         </div>
         <div>
-          <label htmlFor="tickername">Ticker Name:</label>
+          <label htmlFor="tickerSymbol">Symbol:</label>
           <input
             type="text"
-            id="tickername"
-            name="tickername"
-            value={tickername}
-            onChange={(e) => setTickername(e.target.value)}
+            id="tickerSymbol"
+            name="tickerSymbol"
+            value={tickerSymbol}
+            onChange={(e) => setTickerSymbol(e.target.value)}
             required
           />
+        </div>
+        <div>
+          <label htmlFor="tickerClass">Class:</label>
+          <select
+            type="text"
+            id="tickerClass"
+            name="tickerClass"
+            value={tickerClass}
+            onChange={(e) => setTickerClass(e.target.value)}
+            required
+            >
+            <option value="stocks">stocks</option>
+            <option value="bonds">bonds</option>
+            <option value="cash">cash</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="tickerCurrency">Currency:</label>
+          <select
+            type="text"
+            id="tickerCurrency"
+            name="tickerCurrency"
+            value={tickerCurrency}
+            onChange={(e) => setTickerCurrency(e.target.value)}
+            required
+            >
+            <option value="USD">USD</option>
+            <option value="CAD">CAD</option>
+          </select>
         </div>
         <div>
           <label htmlFor="quantity">Quantity:</label>
