@@ -20,12 +20,14 @@ app.post('/login', async(req,res) => {
     // Temp Password 
     // todo replace with db call 
     var dbPass = "password"
-
+    console.log( req.body)
     const {username, password} = req.body
     user = {username: username, password: password}
+    
 
     // If successful and the password matches return 200 to frontend
-    if(username === 'user' && password === dbPass){
+    if(username=== 'user@gmail.com' && password === dbPass){
+        
         req.session.user = user
         res.status(200).json({ message: 'Login successful' }); 
     }

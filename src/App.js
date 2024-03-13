@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Outlet, Route, Routes, Navigate } from 'react-router-dom';
 import ReactDOM from 'react-dom';
-import TransactionForm from './components/transactionForm';
+import TransactionForm from './src/components/transactionForm';
 
 import Login from './components/Login/Login';
 import ProtectedPage from './components/protectedTest/protectedTest';

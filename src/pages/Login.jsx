@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 const Login = ({ setLoggedIn }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const backEndpoint = 'http://localhost:3001/';
@@ -21,8 +20,7 @@ const Login = ({ setLoggedIn }) => {
       navigate('/p');
     })
     .catch(error => {
-      console.error('Login failed', error);
-      setError('Invalid username or password');
+      console.log('Login failed');
     });
   };
 
@@ -43,6 +41,7 @@ const Login = ({ setLoggedIn }) => {
       />
 
       <button onClick={handleLogin}>Login</button>
+      <text>{error}</text>
     </div>
   );
 };
