@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Outlet, Route, Routes, Navigate } from 'react-router-dom';
+import ReactDOM from 'react-dom';
+import TransactionForm from './components/transactionForm';
 
 import Login from './components/Login/Login';
 import ProtectedPage from './components/protectedTest/protectedTest';
@@ -10,9 +12,7 @@ const PrivateRoutes = ({ loggedIn, ...rest }) => {
   console.log("Protected")
   return loggedIn ? <Outlet/> : <Navigate to="/login"/>
 };
-import React from 'react';
-import ReactDOM from 'react-dom';
-import TransactionForm from './components/transactionForm';
+
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
