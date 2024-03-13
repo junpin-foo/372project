@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import React, { useState } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Outlet, Route, Routes, Navigate } from 'react-router-dom';
@@ -11,6 +10,9 @@ const PrivateRoutes = ({ loggedIn, ...rest }) => {
   console.log("Protected")
   return loggedIn ? <Outlet/> : <Navigate to="/login"/>
 };
+import React from 'react';
+import ReactDOM from 'react-dom';
+import TransactionForm from './components/transactionForm';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
