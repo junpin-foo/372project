@@ -1,11 +1,58 @@
-const { Pool } = require('pg');
-var pool
+// const { Pool } = require('pg');
+// var pool
 
-pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    password: '401010abc'
-})
+// pool = new Pool({
+//     user: 'postgres',
+//     host: 'localhost',
+//     password: '401010abc'
+// })
+
+const { Connector } = require('@google-cloud/cloud-sql-connector')
+const pg = require('pg')
+
+const { Pool } = pg;
+
+var connector;
+var pool;
+
+var pooled = false
+
+async function getPool(){
+    if(pooled){
+        return pool;
+    };
+    connector = new Connector();
+    const clientOpts = await connector.getOptions({
+        instanceConnectionName: 
+            process.env.INSTANCE_CONNECTION_NAME || 'sfu-cmpt372-24spring-project:us-central1:project-pg',
+        ipType: 'PUBLIC',
+    });
+    pool = new Pool({
+        ...clientOpts,
+        user: process.env.DB_USER || 'postgres',
+        password: process.env.DB_PASS || 'root',
+        database: process.env.DB_NAME || 'postgres',
+    });
+    pooled = true;
+    return pool;
+}
+
+// async function test() {
+//     pool = await getPool();
+
+//     console.log("query start");
+//     const {rows} = await pool.query(`SELECT * FROM currencies`);
+//     console.log("query finished");
+//     console.log(rows);
+
+//     //cleanup
+//     connector.close();
+//     process.exit(0);
+// }
+
+// test();
+
+pool = getPool();
 
 const helpers = {
     addSecurities: async function(symbol, classIn, currency) {
