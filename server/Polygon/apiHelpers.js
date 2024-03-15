@@ -47,4 +47,4 @@ const polygonApiHelpers = {
 
 module.exports = { polygonApiHelpers }
 
-// console.log(polygonApiHelpers.getStockOpenClose('AAPL', '2024-03-11'))
+// console.log(polygonApiHelpers.getStockOpenClose('AAPL', '2024-03-13'))

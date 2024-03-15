@@ -22,11 +22,29 @@ const helpers = {
         return res_securities.rows
     },
 
-    addSecurityHistory: async function(symbol, date, open, close, high, low) {
+    addSecurityHistory: async function(symbol, date, open, close) {
         //Act as cache for historical data, no need to query api
-        const sql_securities = 'INSERT INTO securities_history (symbol, log_date, price_open, price_close, price_high, price_low) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *'
-        const res_securities = await pool.query(sql_securities, [symbol, date, open, close, high, low])
+        const sql_securities = 'INSERT INTO securities_history (symbol, log_date, price_open, price_close) VALUES ($1, $2, $3, $4) RETURNING *'
+        const res_securities = await pool.query(sql_securities, [symbol, date, open, close])
         return res_securities.rows
+    },
+
+    getUserHolding: async function(user, symbol) {
+        const sql_userHolding = 'SELECT * FROM user_holdings WHERE userid = $1 AND symbol = $2'
+        const res_userHolding = await pool.query(sql_userHolding, [user, symbol])
+        return res_userHolding.rows
+    },
+
+    addUserHolding: async function(user, symbol, quantity, cost_basis, currency) {
+        const sql_userHolding = 'INSERT INTO user_holdings (userid, symbol, quantity, cost_basis, currency) VALUES ($1, $2, $3, $4, $5) RETURNING *'
+        const res_userHolding = await pool.query(sql_userHolding, [user, symbol, quantity, cost_basis, currency])
+        return res_userHolding.rows
+    },
+
+    updateUserHolding: async function(user, symbol, quantity, cost_basis) {
+        const sql_userHolding = 'UPDATE user_holdings SET quantity=$3, cost_basis=$4 WHERE userid=$1 AND symbol=$2 RETURNING *'
+        const res_userHolding = await pool.query(sql_userHolding, [user, symbol, quantity, cost_basis])
+        return res_userHolding.rows
     },
 }
 

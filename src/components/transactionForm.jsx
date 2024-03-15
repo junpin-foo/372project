@@ -1,38 +1,65 @@
 import React, { useState } from 'react';
 
 function TransactionForm() {
-  const [tickerSymbol, setTickerSymbol] = useState('');
-  const [tickerClass, setTickerClass] = useState('');
-  const [tickerCurrency, setTickerCurrency] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [price, setPrice] = useState('');
-  const [date, setDate] = useState('');
-  const [transaction, setTransaction] = useState('buy');
+  const [formData, setFormData] = useState({
+    tickerSymbol: '',
+    tickerClass: 'stocks',
+    tickerCurrency: 'USD',
+    quantity: '',
+    price: '',
+    date: '',
+    transaction: 'buy'
+  });
 
-  const handleSubmit = (e) => {
+  const [submitStatus, setSubmitStatus] = useState({
+    success: false,
+    error: ''
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // handle form submission here
-    // Clear form fields after submission
-    setTickerSymbol('');
-    setTickerClass('stocks');
-    setTickerCurrency('USD');
-    setQuantity('');
-    setPrice('');
-    setDate('');
-    setTransaction('buy');
+    console.log(formData)
+    try{
+      const response = await fetch('http://localhost:3001/submitTransactionForm', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if(response.ok) {
+        setSubmitStatus({ success: true, error: '' });
+      } else {
+        setSubmitStatus({ success: false, error: '' }); //Not sure how to get error here
+      }
+      
+    } catch (error) {
+        console.error("Error: " + error.message)
+        setSubmitStatus({ success: false, error: 'Failed to submit form' });
+    }
+    setFormData({});
   };
 
   return (
     <div>
       <h2>Stock Purchase Form</h2>
-      <form action='http://localhost:8080/submitTransactionForm' method='post'>
+      <form id="transactiom-form" onSubmit={handleSubmit}>
       <div>
           <label htmlFor="transaction">Transaction:</label>
           <select
             id="transaction"
             name="transaction"
-            value={transaction}
-            onChange={(e) => setTransaction(e.target.value)}
+            value={formData.transaction}
+            onChange={handleInputChange}
             required
           >
             <option value="buy">Buy</option>
@@ -45,8 +72,8 @@ function TransactionForm() {
             type="text"
             id="tickerSymbol"
             name="tickerSymbol"
-            value={tickerSymbol}
-            onChange={(e) => setTickerSymbol(e.target.value)}
+            value={formData.tickerSymbol}
+            onChange={handleInputChange}
             required
           />
         </div>
@@ -56,8 +83,8 @@ function TransactionForm() {
             type="text"
             id="tickerClass"
             name="tickerClass"
-            value={tickerClass}
-            onChange={(e) => setTickerClass(e.target.value)}
+            value={formData.tickerClass}
+            onChange={handleInputChange}
             required
             >
             <option value="stocks">stocks</option>
@@ -71,8 +98,8 @@ function TransactionForm() {
             type="text"
             id="tickerCurrency"
             name="tickerCurrency"
-            value={tickerCurrency}
-            onChange={(e) => setTickerCurrency(e.target.value)}
+            value={formData.tickerCurrency}
+            onChange={handleInputChange}
             required
             >
             <option value="USD">USD</option>
@@ -85,8 +112,8 @@ function TransactionForm() {
             type="number"
             id="quantity"
             name="quantity"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            value={formData.quantity}
+            onChange={handleInputChange}
             required
           />
         </div>
@@ -97,8 +124,8 @@ function TransactionForm() {
             id="price"
             name="price"
             step="0.01"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            value={formData.price}
+            onChange={handleInputChange}
             required
           />
         </div>
@@ -108,8 +135,8 @@ function TransactionForm() {
             type="date"
             id="date"
             name="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
+            value={formData.date}
+            onChange={handleInputChange}
             required
           />
         </div>
@@ -117,6 +144,8 @@ function TransactionForm() {
           <button type="submit">Submit</button>
         </div>
       </form>
+      {submitStatus.success && <p>Form submitted successfully!</p>}
+      {submitStatus.error && <p>{submitStatus.error}</p>}
     </div>
   );
 }

@@ -1,10 +1,37 @@
+import React, { useState } from 'react';
 import './App.css';
-import React from 'react';
+import { BrowserRouter as Router, Outlet, Route, Routes, Navigate } from 'react-router-dom';
 import ReactDOM from 'react-dom';
-import TransactionForm from './components/transactionForm';
+import TransactionForm from './src/components/transactionForm';
+
+import Login from './components/Login/Login';
+import ProtectedPage from './components/protectedTest/protectedTest';
+
+// Function to check if a user is logged in 
+const PrivateRoutes = ({ loggedIn, ...rest }) => {
+  console.log("Protected")
+  return loggedIn ? <Outlet/> : <Navigate to="/login"/>
+};
+
 
 function App() {
-  return <div><TransactionForm /></div>
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  return (
+    <Router>
+      <Routes>
+
+        // Place procted routes here
+        // Checks if user is logged in or not and denies entry if not
+        <Route element={<PrivateRoutes loggedIn = {loggedIn} /> }>
+          <Route path="p" element ={<ProtectedPage setLoggedIn={setLoggedIn} />}/>
+
+        </Route>
+        <Route path="login" element ={<Login setLoggedIn={setLoggedIn} />}/>
+    
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
