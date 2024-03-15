@@ -18,7 +18,11 @@ export default function HomePage({ setLoggedIn }) {
       .then(response => {
         console.log('Login successful');
         setLoggedIn(true);
-        navigate('/dashboard');
+        navigate('/dashboard', {
+          state: {
+            username: email,
+          }
+        });
       })
       .catch(error => {
 
