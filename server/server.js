@@ -35,15 +35,17 @@ function isLoggedIn(req, res, next) {
 app.post('/login', async(req,res) => {
     // Temp Password 
     // todo replace with db call 
-    var dbPass = "password"
-    
-    const {username, password} = req.body
-    console.log(await db.helpers.getUser(username))
-    user = {username: username, password: password}
-    
 
+
+    const {username, password} = req.body
+    user = {username: username, password: password}
+
+    var dataUser = (await db.helpers.getUser("user"))[0]
+    const dbUsername = dataUser["userid"]
+    var dbPass = dataUser["password_hash"]
+    
     // If successful and the password matches return 200 to frontend
-    if(username=== 'user@gmail.com' && password === dbPass){
+    if(username=== dbUsername && password === dbPass){
         
         req.session.user = user
         res.status(200).json({ message: 'Login successful' }); 
