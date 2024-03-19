@@ -1,14 +1,21 @@
 import Navbar from '../components/Navbar';
+<<<<<<< HEAD
 import TransactionForm from '../components/transactionForm';
+=======
+import { useLocation } from 'react-router-dom';
+>>>>>>> master
 
 export default function DashboardPage() {
+    const location = useLocation();
+    const { username } = location.state || {};
+
     return (
         <main>
             <Navbar />
 
             <div className="dashboard container-fluid">
                 <header className="dashboard-header">
-                    <h1 className="text-center">Dashboard</h1>
+                    <h1 className="text-center">Dashboard of {username}</h1>
                 </header>
 
                 <div classname="placeholder bg-primary col-12"><TransactionForm /></div>
