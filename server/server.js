@@ -42,7 +42,7 @@ app.post('/login', async(req,res) => {
     
 
     // If successful and the password matches return 200 to frontend
-    if(username=== 'user@gmail.com' && password === dbPass){
+    if(username=== 'user' && password === dbPass){
         
         req.session.user = user
         res.status(200).json({ message: 'Login successful' }); 
@@ -140,7 +140,8 @@ app.post("/submitTransactionForm", async (req, res, next) => {
     res.status(204).send();
 })
 
-app.get('/user/holdings', isLoggedIn, async (req, res) => {
+app.get('/user/holdings', async (req, res) => {
+    console.log('Fetching User Holdings')
     const user = req.session.user
 
     const data = await db.helpers.getAllUserHoldings(user)
