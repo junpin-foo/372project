@@ -1,9 +1,6 @@
 import Navbar from '../components/Navbar';
-<<<<<<< HEAD
 import TransactionForm from '../components/transactionForm';
-=======
 import { useLocation } from 'react-router-dom';
->>>>>>> master
 
 export default function DashboardPage() {
     const location = useLocation();
@@ -18,8 +15,8 @@ export default function DashboardPage() {
                     <h1 className="text-center">Dashboard of {username}</h1>
                 </header>
 
-                <div classname="placeholder bg-primary col-12"><TransactionForm /></div>
-                <div className="placeholder bg-success col-12"></div>
+                <div classname="bg-primary col-12"><TransactionForm /></div>
+                <div className="bg-success col-12"></div>
                 <div className="placeholder bg-info col-12"></div>
                 <div className="placeholder col-12"></div>
                 <div className="placeholder bg-warning col-12"></div>
