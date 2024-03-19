@@ -36,8 +36,9 @@ app.post('/login', async(req,res) => {
     // Temp Password 
     // todo replace with db call 
     var dbPass = "password"
-    console.log( req.body)
+    
     const {username, password} = req.body
+    console.log(await db.helpers.getUser(username))
     user = {username: username, password: password}
     
 
