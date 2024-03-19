@@ -76,6 +76,13 @@ const helpers = {
         return res_securities.rows
     },
 
+    getAllUserHoldings: async function(user) {
+        const sql_allUserHoldings = 'SELECT * FROM user_holdings WHERE userid = $1'
+        const res_allUserHoldings = await pool.query(sql_allUserHoldings, [user])
+
+        return res_allUserHoldings.rows
+    },
+
     getUserHolding: async function(user, symbol) {
         const sql_userHolding = 'SELECT * FROM user_holdings WHERE userid = $1 AND symbol = $2'
         const res_userHolding = await pool.query(sql_userHolding, [user, symbol])
