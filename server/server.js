@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cors({
     origin: "*", // allow all origin
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE"
-  }))
+ }))
 
 app.use(session({
     name: 'nsession',
@@ -23,6 +23,14 @@ app.use(session({
     saveUninitialized: false,
     maxAge: 1000*60*60, 
 }))
+
+function isLoggedIn(req, res, next) {
+    if (req.session.user) {
+        next()
+    } else {
+        res.redirect('/')
+    }
+}
 
 app.post('/login', async(req,res) => {
     // Temp Password 
@@ -131,6 +139,14 @@ app.post("/submitTransactionForm", async (req, res, next) => {
     const results = profit + loss; //if (-) total loss ELSE total profit
     console.log("Overall return: " + results)
     res.status(204).send();
+})
+
+app.get('/user/holdings', isLoggedIn, async (req, res) => {
+    const user = req.session.user
+
+    const data = await db.helpers.getAllUserHoldings(user)
+
+    res.status(200).json(data)
 })
 
 app.post('/logout', async(req,res)=>{
