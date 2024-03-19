@@ -15,8 +15,10 @@ export default function DashboardPage() {
                     <h1 className="text-center">Dashboard of {username}</h1>
                 </header>
 
-                <div classname="bg-primary col-12"><TransactionForm /></div>
-                <div className="bg-success col-12"></div>
+                <div classname="border bg-primary col-12"><TransactionForm /></div>
+                <div className="border bg-success col-12">
+                    <UserHoldingsList username={username}>
+                </div>
                 <div className="placeholder bg-info col-12"></div>
                 <div className="placeholder col-12"></div>
                 <div className="placeholder bg-warning col-12"></div>
