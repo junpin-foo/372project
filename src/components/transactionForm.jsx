@@ -18,6 +18,16 @@ function TransactionForm() {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    // if(name === "transaction" && value === "deposit" || value === "withdraw") {
+    //   // cashFunction()
+    //   setFormData({
+    //     ...formData,
+    //     [name]: value,
+    //     tickerClass: 'cash',
+    //     quantity: '1',
+    //   });
+    //   console.log("CASH")
+    // }
     setFormData({
       ...formData,
       [name]: value
@@ -28,25 +38,36 @@ function TransactionForm() {
     e.preventDefault();
     console.log(formData)
     try{
-      const response = await fetch('http://localhost:3001/submitTransactionForm', {
+      await fetch('http://localhost:3001/submitTransactionForm', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData)
-      });
-
-      if(response.ok) {
-        setSubmitStatus({ success: true, error: '' });
-      } else {
-        setSubmitStatus({ success: false, error: '' }); //Not sure how to get error here
       }
-      
+      ).then( response => {
+        if(response.ok) {
+          setSubmitStatus({ success: true, error: '' });
+        }
+        else if (response.status === 400) {
+          setSubmitStatus({ success: false, error: 'Insufficient funds!' });
+        }
+    });
     } catch (error) {
-        console.error("Error: " + error.message)
-        setSubmitStatus({ success: false, error: 'Failed to submit form' });
+        console.log("Error: " + error)
+        setSubmitStatus({ success: false, error: error });
+    } finally {
+      e.target.reset();
+      setFormData({
+        tickerSymbol: '',
+        tickerClass: 'stocks',
+        tickerCurrency: 'USD',
+        quantity: '',
+        price: '',
+        date: '',
+        transaction: 'buy'
+      });
     }
-    setFormData({});
   };
 
   return (
@@ -64,6 +85,8 @@ function TransactionForm() {
           >
             <option value="buy">Buy</option>
             <option value="sell">Sell</option>
+            <option value="deposit">Deposit</option>
+            <option value="withdraw">Withdraw</option>
           </select>
         </div>
         <div>

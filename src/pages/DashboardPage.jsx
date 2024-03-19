@@ -1,5 +1,6 @@
 import Navbar from '../components/Navbar';
 import TransactionForm from '../components/transactionForm';
+import UserHoldingsList from '../components/UserHoldingsList';
 import { useLocation } from 'react-router-dom';
 
 export default function DashboardPage() {

@@ -13,12 +13,12 @@ export default function UserHoldingsList({ username }) {
 
                 let newSymbols = []
                 for (const item of data) {
-                    newSymbols.push({
-                        symbol,
-                        quantity,
-                        cost_basis,
-                        currency
-                    });
+                newSymbols.push({
+                symbol,
+                quantity,
+                cost_basis,
+                currency
+                });
                 }
 
                 setSymbols(newSymbols);
