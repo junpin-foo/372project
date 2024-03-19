@@ -93,6 +93,12 @@ const helpers = {
         const res_userHolding = await pool.query(sql_userHolding, [user, symbol, quantity, cost_basis])
         return res_userHolding.rows
     },
+
+    getUser: async function(user) {
+        const sql_userHolding = 'SELECT * from users WHERE userid=$1'
+        const res_userHolding = await pool.query(sql_userHolding, [user])
+        return res_userHolding.rows
+    },
 }
 
 module.exports = { helpers }
