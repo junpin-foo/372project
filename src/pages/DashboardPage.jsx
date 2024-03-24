@@ -18,7 +18,7 @@ export default function DashboardPage() {
 
                 <div classname="border bg-primary col-12"><TransactionForm /></div>
                 <div className="border bg-success col-12">
-                    <UserHoldingsList username={username}>
+    
                 </div>
                 <div className="placeholder bg-info col-12"></div>
                 <div className="placeholder col-12"></div>

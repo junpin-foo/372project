@@ -48,6 +48,7 @@ app.post('/login', async(req,res) => {
     if(username=== dbUsername && password === dbPass){
         
         req.session.user = user
+        console.log(req.session.user)
         res.status(200).json({ message: 'Login successful' }); 
     }
     else {
@@ -67,7 +68,7 @@ app.post("/submitTransactionForm", async (req, res, next) => {
 
     let user = "user"//req.session.user
 
-    console.log(req.body)
+    console.log(req.session)
 
     //Insert into securities table if not exist
     await db.helpers.addSecurities(ticker_symbol, ticker_class, ticker_currency)

@@ -10,6 +10,7 @@ const Login = ({ setLoggedIn }) => {
   const backEndpoint = 'http://localhost:3001/';
 
   const handleLogin = () => {
+    axios.defaults.withCredentials = true;
     axios.post(backEndpoint + "login", {
       username: username,
       password: password

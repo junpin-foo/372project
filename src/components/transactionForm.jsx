@@ -40,6 +40,7 @@ function TransactionForm() {
     try{
       await fetch('http://localhost:3001/submitTransactionForm', {
         method: 'POST',
+        credentials:'include',
         headers: {
           'Content-Type': 'application/json'
         },
