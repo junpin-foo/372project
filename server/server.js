@@ -5,6 +5,7 @@ const PORT = 3001;
 const cors = require('cors')
 const session = require('express-session')
 const createHttpError = require("http-errors");
+const bcrypt = require('bcryptjs');
 
 const app = express()
 
@@ -37,25 +38,38 @@ function isLoggedIn(req, res, next) {
         res.redirect('/')
     }
 }
-app.get('/l', async(req,res) => {
-    console.log(req.session)
-    return "hi";
+app.get('/getAllUsers', async(req,res) => {
+    var users = (await db.helpers.getAllUsers("user"))
+
+    res.json(users)
+})
+
+
+app.post('/signup', async(req,res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const manager = req.body.manager;
+    const role = req.body.role;
+    console.log(password)
+    var users = (await db.helpers.addUser(username, role,password,manager))
+
+    res.status(200).json({ message: 'Signup successful' }); 
 })
 app.post('/login', async(req,res) => {
-    // Temp Password 
-    // todo replace with db call 
-
 
     const username = req.body.username;
     const password = req.body.password;
     user = {username: username, password: password}
-
-    var dataUser = (await db.helpers.getUser("user"))[0]
+    console.log(user)
+    var dataUser = (await db.helpers.getUser(username))[0]
     const dbUsername = dataUser["userid"]
     var dbPass = dataUser["password_hash"]
+    console.log(dbPass)
+    console.log(bcrypt.hashSync(password, 10))
+    console.log(bcrypt.compareSync(password, dbPass))
     
     // If successful and the password matches return 200 to frontend
-    if(username=== dbUsername && password === dbPass){
+    if(username=== dbUsername && bcrypt.compareSync(password, dbPass)){
         
         req.session.user = user
         res.status(200).json({ message: 'Login successful' }); 
@@ -65,7 +79,7 @@ app.post('/login', async(req,res) => {
     }
 })
 
-app.post("/submitTransactionForm", async (req, res, next) => {
+app.post("/submitTransactionForm", isLoggedIn, async (req, res, next) => {
     //User form data
     let transaction = req.body.transaction //Bought OR Sold
     let ticker_symbol = req.body.tickerSymbol
@@ -74,8 +88,8 @@ app.post("/submitTransactionForm", async (req, res, next) => {
     let quantity = Number(req.body.quantity)
     let price = req.body.price
     let date = req.body.date
-    console.log(req.session.user)
-    let user = "user"//req.session.user
+
+    let user = req.session.user.username
 
 
     //Insert into securities table if not exist

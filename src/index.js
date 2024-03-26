@@ -4,6 +4,7 @@ import { BrowserRouter, Outlet, Route, Routes, Navigate } from 'react-router-dom
 import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
 import RankingsPage from './pages/RankingsPage';
+import SignUp from './pages/SignUpPage';
 
 import './index.css';
 
@@ -27,6 +28,7 @@ function App() {
                     <Route path="/rankings" element={<RankingsPage />} />
                 </Route>
                 <Route path="/" element={<HomePage setLoggedIn={setLoggedIn} />} />
+                <Route path="/signup" element={<SignUp/>} />
                 
             </Routes>
         </BrowserRouter>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import bcrypt from 'bcryptjs';
 
 export default function HomePage({ setLoggedIn }) {
   const [email, setEmail] = useState('');
@@ -11,10 +12,12 @@ export default function HomePage({ setLoggedIn }) {
 
   const handleLogin = (event) => {
     event.preventDefault();
+ 
+
     axios.post(backEndpoint + "login", {
       username: email,
       password: password
-    }, {withCredentials:true})
+    })
       .then(response => {
         console.log('Login successful');
         setLoggedIn(true);
@@ -27,6 +30,13 @@ export default function HomePage({ setLoggedIn }) {
       .catch(error => {
 
       });
+  };
+
+  const handleSign = (event) => {
+    event.preventDefault();
+
+    navigate('/signup');
+
   };
   return (
     <main className="vh-100 d-flex justify-content-center align-items-center">
@@ -45,6 +55,7 @@ export default function HomePage({ setLoggedIn }) {
           </div>
 
           <button onClick={handleLogin} className="btn btn-success">Login</button>
+          <button onClick={handleSign} className="btn btn-success">Sign Up</button>
         </form>
       </div>
     </main>
