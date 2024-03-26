@@ -53,6 +53,49 @@ app.post('/login', async(req,res) => {
     }
 })
 
+app.post("/submitMoneyForm", async (req, res, next) => {
+    //User form data
+    let transaction = req.body.transaction //withdraw / deposit
+    let currency = req.body.currency
+    let amount = Number(req.body.amount)
+
+    let user = "user"//req.session.user
+
+    console.log(req.body)
+
+    //**Ensure cash is auto created when user created**
+    //symbol = USD/CAD, Quantity = 1, cash_basis = value
+    let user_holding_cash = await db.helpers.getUserHolding(user, currency)
+
+    //If no CASH entry create one
+    if(JSON.stringify(user_holding_cash) === '[]') {
+        //Initialize new entry - for cash
+        user_holding = await db.helpers.addUserHolding(user, "USD", 1, 0, currency)
+    }
+
+    if(transaction == "deposit") {
+        let current_cash = Number(user_holding_cash[0].cost_basis)
+        let new_cash = current_cash + amount;
+        let user_holding_sell_cash = await db.helpers.updateUserHolding(user, "USD", 1, new_cash)
+
+    } 
+    else if (transaction == "withdraw") {
+        let current_cash = Number(user_holding_cash[0].cost_basis)
+        let new_cash = current_cash - amount;
+        if(new_cash < 0) {
+            const error = createHttpError(400, "Insufficient funds!", {
+                headers: {
+                    "X-Custom-Header": "Value"
+                }
+            });
+            return next(error);
+        }
+        let user_holding_sell_cash = await db.helpers.updateUserHolding(user, "USD", 1, new_cash)
+
+    }
+    res.status(204).send();
+})
+
 app.post("/submitTransactionForm", async (req, res, next) => {
     //User form data
     let transaction = req.body.transaction //Bought OR Sold
@@ -87,7 +130,7 @@ app.post("/submitTransactionForm", async (req, res, next) => {
     //If no CASH entry create one
     if(JSON.stringify(user_holding_cash) === '[]') {
         //Initialize new entry - for cash
-        user_holding = await db.helpers.addUserHolding(user, "USD", 1, 0, ticker_currency) //**CHANGE USD to CURRENCY later on**
+        user_holding = await db.helpers.addUserHolding(user, "USD", 1, 0, ticker_currency)
     }
 
     //User does not hold this symbol yet
@@ -104,27 +147,7 @@ app.post("/submitTransactionForm", async (req, res, next) => {
     let current_quantity = Number(user_holding[0].quantity);
     let current_cost_basis = Number(user_holding[0].cost_basis);
 
-    if(transaction == "deposit" && ticker_class == "cash") {
-        let current_cash = Number(user_holding_cash[0].cost_basis)
-        let new_cash = current_cash + (price*1);
-        let user_holding_sell_cash = await db.helpers.updateUserHolding(user, "USD", 1, new_cash)
-
-    } 
-    else if (transaction == "withdraw" && ticker_class == "cash") {
-        let current_cash = Number(user_holding_cash[0].cost_basis)
-        let new_cash = current_cash - (price*1);
-        if(new_cash < 0) {
-            const error = createHttpError(400, "Insufficient funds!", {
-                headers: {
-                    "X-Custom-Header": "Value"
-                }
-            });
-            return next(error);
-        }
-        let user_holding_sell_cash = await db.helpers.updateUserHolding(user, "USD", 1, new_cash)
-
-    }
-    else if(transaction == "buy") {
+    if(transaction == "buy") {
         let current_cash = Number(user_holding_cash[0].cost_basis)
         let new_cash = current_cash - (price*quantity);
         try {
@@ -172,10 +195,9 @@ app.post("/submitTransactionForm", async (req, res, next) => {
 
 app.get('/user/holdings', async (req, res) => {
     console.log('Fetching User Holdings')
-    const user = req.session.user
+    const user = "user"//req.session.user
 
     const data = await db.helpers.getAllUserHoldings(user)
-
     res.status(200).json(data)
 })
 

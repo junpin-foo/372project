@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css'
+import moment from "moment/moment";
 
 function TransactionForm({ symbols, setSymbols, updateUserHoldingsList }) {
     const [formData, setFormData] = useState({
@@ -11,6 +14,8 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList }) {
         transaction: 'buy'
     });
 
+    const [startDate, setStartDate] = useState(new Date());
+
     const [submitStatus, setSubmitStatus] = useState({
         success: false,
         error: ''
@@ -18,21 +23,24 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList }) {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        // if(name === "transaction" && value === "deposit" || value === "withdraw") {
-        //   // cashFunction()
-        //   setFormData({
-        //     ...formData,
-        //     [name]: value,
-        //     tickerClass: 'cash',
-        //     quantity: '1',
-        //   });
-        //   console.log("CASH")
-        // }
         setFormData({
             ...formData,
             [name]: value
         });
     };
+
+    const handleDateChange = (event) => {
+        const { name, value } = event.target;
+
+        setStartDate(value)
+
+        setFormData({
+            ...formData,
+            [name]: moment(value).format("yyyy-MM-DD")
+        });
+    };
+
+    const isDisabled = date => date.getDay() !== 0 && date.getDay() !== 6;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -87,8 +95,6 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList }) {
                     >
                         <option value="buy">Buy</option>
                         <option value="sell">Sell</option>
-                        <option value="deposit">Deposit</option>
-                        <option value="withdraw">Withdraw</option>
                     </select>
                 </div>
                 <div>
@@ -156,13 +162,23 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList }) {
                 </div>
                 <div>
                     <label htmlFor="date">Date:</label>
-                    <input
+                    {/* <input
                         type="date"
                         id="date"
                         name="date"
                         value={formData.date}
                         onChange={handleInputChange}
                         required
+                    /> */}
+                    <DatePicker
+                        format="yyyy-MM-dd"
+                        id="date"
+                        name="date"
+                        value={formData.date}
+                        selected={startDate}
+                        onChange={(date) => handleDateChange({target: { name: "date", value: date }})}
+                        maxDate={new Date()}
+                        filterDate={isDisabled}
                     />
                 </div>
                 <div>
