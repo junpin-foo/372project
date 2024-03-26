@@ -9,11 +9,12 @@ const createHttpError = require("http-errors");
 const app = express()
 
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+// app.use(express.urlencoded({ extended: false }))
 
 app.use(cors({
-    origin: "*", // allow all origin
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE"
+    origin: "http://localhost:3000", // allow all origin
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials:true
  }))
 
 app.use(session({
@@ -22,7 +23,12 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     maxAge: 1000*60*60, 
+    cookie:{
+        secure:false
+
+    }
 }))
+
 
 function isLoggedIn(req, res, next) {
     if (req.session.user) {
@@ -31,13 +37,17 @@ function isLoggedIn(req, res, next) {
         res.redirect('/')
     }
 }
-
+app.get('/l', async(req,res) => {
+    console.log(req.session)
+    return "hi";
+})
 app.post('/login', async(req,res) => {
     // Temp Password 
     // todo replace with db call 
 
 
-    const {username, password} = req.body
+    const username = req.body.username;
+    const password = req.body.password;
     user = {username: username, password: password}
 
     var dataUser = (await db.helpers.getUser("user"))[0]
@@ -48,7 +58,6 @@ app.post('/login', async(req,res) => {
     if(username=== dbUsername && password === dbPass){
         
         req.session.user = user
-        console.log(req.session.user)
         res.status(200).json({ message: 'Login successful' }); 
     }
     else {
@@ -65,10 +74,9 @@ app.post("/submitTransactionForm", async (req, res, next) => {
     let quantity = Number(req.body.quantity)
     let price = req.body.price
     let date = req.body.date
-
+    console.log(req.session.user)
     let user = "user"//req.session.user
 
-    console.log(req.session)
 
     //Insert into securities table if not exist
     await db.helpers.addSecurities(ticker_symbol, ticker_class, ticker_currency)
@@ -176,6 +184,7 @@ app.post("/submitTransactionForm", async (req, res, next) => {
 app.get('/user/holdings', async (req, res) => {
     console.log('Fetching User Holdings')
     const user = req.session.user
+
 
     const data = await db.helpers.getAllUserHoldings(user)
 

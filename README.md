@@ -1,7 +1,12 @@
-# Authors
-Caleb Tong
-Jesse Huang
-JunPin Foo
+# Authors & Contributions
+
+Caleb Tong: Authentication
+
+Jesse Huang: User Interface
+
+JunPin Foo: API integration
+
+Eric Chen: Database & Deployment
 
 # Getting Started with Create React App
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

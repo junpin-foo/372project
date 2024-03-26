@@ -14,7 +14,7 @@ export default function HomePage({ setLoggedIn }) {
     axios.post(backEndpoint + "login", {
       username: email,
       password: password
-    })
+    }, {withCredentials:true})
       .then(response => {
         console.log('Login successful');
         setLoggedIn(true);
