@@ -60,13 +60,10 @@ app.post('/login', async(req,res) => {
     const username = req.body.username;
     const password = req.body.password;
     user = {username: username, password: password}
-    console.log(user)
     var dataUser = (await db.helpers.getUser(username))[0]
     const dbUsername = dataUser["userid"]
     var dbPass = dataUser["password_hash"]
-    console.log(dbPass)
-    console.log(bcrypt.hashSync(password, 10))
-    console.log(bcrypt.compareSync(password, dbPass))
+
     
     // If successful and the password matches return 200 to frontend
     if(username=== dbUsername && bcrypt.compareSync(password, dbPass)){
@@ -195,7 +192,7 @@ app.post("/submitTransactionForm", isLoggedIn, async (req, res, next) => {
     res.status(204).send();
 })
 
-app.get('/user/holdings', async (req, res) => {
+app.get('/user/holdings', isLoggedIn, async (req, res) => {
     console.log('Fetching User Holdings')
     const user = req.session.user
 
@@ -205,7 +202,7 @@ app.get('/user/holdings', async (req, res) => {
     res.status(200).json(data)
 })
 
-app.post('/logout', async(req,res)=>{
+app.post('/logout',isLoggedIn, async(req,res)=>{
     // Remove the session and login 
     req.session.destroy()
     res.status(200).json({ message: 'Logout successful' }); 

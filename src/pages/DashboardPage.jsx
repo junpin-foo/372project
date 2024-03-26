@@ -25,6 +25,7 @@ export default function DashboardPage() {
         updateUserHoldingsList();
     }, []);
 
+   
     const location = useLocation();
     const { username } = location.state || {};
 

@@ -38,6 +38,7 @@ export default function HomePage({ setLoggedIn }) {
     navigate('/signup');
 
   };
+
   return (
     <main className="vh-100 d-flex justify-content-center align-items-center">
       <div className="home-form-container">
