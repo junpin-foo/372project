@@ -1,6 +1,25 @@
 import { Link } from 'react-router-dom';
-
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 export default function Navbar() {
+    const backEndpoint = 'http://localhost:3001/';
+    const navigate = useNavigate();
+    const handleLogout = (event) => {
+        event.preventDefault();
+    
+        axios.post(backEndpoint + "logout")
+          .then(response => {
+            console.log('logout successful');
+            navigate('/', {
+     
+            });
+          })
+          .catch(error => {
+    
+          });
+      };
+
+
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
@@ -15,6 +34,8 @@ export default function Navbar() {
                         <Link to="/rankings" className="nav-link" href="#">Rankings</Link>
                     </div>
                 </div>
+
+                <button onClick={handleLogout} className="btn btn-success">Logout</button>
             </div>
         </nav>
     );

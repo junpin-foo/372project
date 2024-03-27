@@ -48,6 +48,7 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList }) {
         try{
             await fetch('http://localhost:3001/submitTransactionForm', {
                 method: 'POST',
+                credentials:'include',
                 headers: {
                     'Content-Type': 'application/json'
                 },

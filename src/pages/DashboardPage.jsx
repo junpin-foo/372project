@@ -11,9 +11,12 @@ export default function DashboardPage() {
     const backEndpoint = 'http://localhost:3001/';
 
     function updateUserHoldingsList() {
-        axios.get(backEndpoint + 'user/holdings')
+        axios.defaults.withCredentials = true;
+
+        axios.get(backEndpoint + 'user/holdings', {withCredentials:true})
             .then(response => {
                 const data = response.data
+                console.log(data)
                 setSymbols(data);
             })
             .catch(error => {
@@ -25,6 +28,7 @@ export default function DashboardPage() {
         updateUserHoldingsList();
     }, []);
 
+   
     const location = useLocation();
     const { username } = location.state || {};
 

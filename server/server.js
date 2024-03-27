@@ -5,15 +5,17 @@ const PORT = 3001;
 const cors = require('cors')
 const session = require('express-session')
 const createHttpError = require("http-errors");
+const bcrypt = require('bcryptjs');
 
 const app = express()
 
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+// app.use(express.urlencoded({ extended: false }))
 
 app.use(cors({
-    origin: "*", // allow all origin
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE"
+    origin: "http://localhost:3000", // allow all origin
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials:true
  }))
 
 app.use(session({
@@ -22,28 +24,48 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     maxAge: 1000*60*60, 
+    cookie:{
+        secure:false
+
+    }
 }))
 
+
 function isLoggedIn(req, res, next) {
+    console.log(req.session.user)
     if (req.session.user) {
         next()
     } else {
         res.redirect('/')
     }
 }
+app.get('/getAllUsers', async(req,res) => {
+    var users = (await db.helpers.getAllUsers("user"))
 
+    res.json(users)
+})
+
+
+app.post('/signup', async(req,res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const manager = req.body.manager;
+    const role = req.body.role;
+    console.log(password)
+    var users = (await db.helpers.addUser(username, role,password,manager))
+
+    res.status(200).json({ message: 'Signup successful' }); 
+})
 app.post('/login', async(req,res) => {
-    // Temp Password 
-    // todo replace with db call 
-    var dbPass = "password"
-    
-    const {username, password} = req.body
-    console.log(await db.helpers.getUser(username))
-    user = {username: username, password: password}
-    
 
-    // If successful and the password matches return 200 to frontend
-    if(username=== 'user' && password === dbPass){
+    const username = req.body.username;
+    const password = req.body.password;
+    user = {username: username, password: password}
+    var dataUser = (await db.helpers.getUser(username))[0]
+    const dbUsername = dataUser["userid"]
+    var dbPass = dataUser["password_hash"]
+
+        if(username=== dbUsername && bcrypt.compareSync(password, dbPass)){
         
         req.session.user = user
         res.status(200).json({ message: 'Login successful' }); 
@@ -106,9 +128,8 @@ app.post("/submitTransactionForm", async (req, res, next) => {
     let price = req.body.price
     let date = req.body.date
 
-    let user = "user"//req.session.user
+    let user = req.session.user.username
 
-    console.log(req.body)
 
     //Insert into securities table if not exist
     await db.helpers.addSecurities(ticker_symbol, ticker_class, ticker_currency)
@@ -193,15 +214,16 @@ app.post("/submitTransactionForm", async (req, res, next) => {
     res.status(204).send();
 })
 
-app.get('/user/holdings', async (req, res) => {
+app.get('/user/holdings', isLoggedIn, async (req, res) => {
     console.log('Fetching User Holdings')
-    const user = "user"//req.session.user
+    const user = req.session.user.username
+
 
     const data = await db.helpers.getAllUserHoldings(user)
     res.status(200).json(data)
 })
 
-app.post('/logout', async(req,res)=>{
+app.post('/logout',isLoggedIn, async(req,res)=>{
     // Remove the session and login 
     req.session.destroy()
     res.status(200).json({ message: 'Logout successful' }); 
