@@ -32,6 +32,7 @@ app.use(session({
 
 
 function isLoggedIn(req, res, next) {
+    console.log(req.session.user)
     if (req.session.user) {
         next()
     } else {
@@ -64,9 +65,7 @@ app.post('/login', async(req,res) => {
     const dbUsername = dataUser["userid"]
     var dbPass = dataUser["password_hash"]
 
-    
-    // If successful and the password matches return 200 to frontend
-    if(username=== dbUsername && bcrypt.compareSync(password, dbPass)){
+        if(username=== dbUsername && bcrypt.compareSync(password, dbPass)){
         
         req.session.user = user
         res.status(200).json({ message: 'Login successful' }); 
@@ -194,7 +193,7 @@ app.post("/submitTransactionForm", isLoggedIn, async (req, res, next) => {
 
 app.get('/user/holdings', isLoggedIn, async (req, res) => {
     console.log('Fetching User Holdings')
-    const user = req.session.user
+    const user = req.session.user.username
 
 
     const data = await db.helpers.getAllUserHoldings(user)

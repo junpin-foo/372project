@@ -11,9 +11,11 @@ export default function DashboardPage() {
 
     function updateUserHoldingsList() {
         axios.defaults.withCredentials = true;
+
         axios.get(backEndpoint + 'user/holdings', {withCredentials:true})
             .then(response => {
                 const data = response.data
+                console.log(data)
                 setSymbols(data);
             })
             .catch(error => {

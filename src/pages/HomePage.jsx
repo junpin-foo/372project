@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import bcrypt from 'bcryptjs';
+
 
 export default function HomePage({ setLoggedIn }) {
   const [email, setEmail] = useState('');
@@ -12,12 +12,12 @@ export default function HomePage({ setLoggedIn }) {
 
   const handleLogin = (event) => {
     event.preventDefault();
- 
+    axios.defaults.withCredentials = true;
 
     axios.post(backEndpoint + "login", {
       username: email,
       password: password
-    })
+    }, {withCredentials:true})
       .then(response => {
         console.log('Login successful');
         setLoggedIn(true);
