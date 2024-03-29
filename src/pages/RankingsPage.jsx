@@ -1,6 +1,27 @@
 import Navbar from '../components/Navbar';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 export default function RankingsPage() {
+    const [symbols, setSymbols] = useState([]);
+    const backEndpoint = 'http://localhost:3001/';
+
+    function updateUserHoldingsList() {
+        axios.defaults.withCredentials = true;
+
+        axios.get(backEndpoint + 'ranking', {withCredentials:true})
+            .then(response => {
+                const data = response.data
+                console.log(data)
+                setSymbols(data);
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
+    updateUserHoldingsList()
+
     return (
         <main>
             <Navbar />

@@ -6,6 +6,7 @@ const cors = require('cors')
 const session = require('express-session')
 const createHttpError = require("http-errors");
 const bcrypt = require('bcryptjs');
+const moment = require('moment');
 
 const app = express()
 
@@ -81,7 +82,7 @@ app.post("/submitMoneyForm", async (req, res, next) => {
     let currency = req.body.currency
     let amount = Number(req.body.amount)
 
-    let user = "user"//req.session.user
+    let user = req.session.user.username
 
     console.log(req.body)
 
@@ -134,11 +135,20 @@ app.post("/submitTransactionForm", async (req, res, next) => {
     //Insert into securities table if not exist
     await db.helpers.addSecurities(ticker_symbol, ticker_class, ticker_currency)
 
+    //Call Polygon api to check if symbol is valid
+    let data = await api.polygonApiHelpers.getStockOpenClose(ticker_symbol, date)
+    if (data.status == "NOT_FOUND" || data.status == "ERROR") {
+        const error = createHttpError(406, "Invalid Symbol!", {
+            headers: {
+                "X-Custom-Header": "Value"
+            }
+        });
+        return next(error);
+    }
+
     //Check if we have this ticker closing price cached in DB
     let p = await db.helpers.getSecurityHistory(ticker_symbol, date)
     if(JSON.stringify(p) === '[]') {
-        //Do API call if not found
-        let data = await api.polygonApiHelpers.getStockOpenClose(ticker_symbol, date)
         //Add into DB for cache
         p = await db.helpers.addSecurityHistory(ticker_symbol, date, data.open, data.close)
     }
@@ -212,6 +222,70 @@ app.post("/submitTransactionForm", async (req, res, next) => {
     const results = profit + loss; //if (-) total loss ELSE total profit
     console.log("Overall return: " + results)
     res.status(204).send();
+})
+
+app.get("/ranking", async (req, res) => {
+    const usersArray = [];
+
+    const result = await db.helpers.distinctUserFromHoldings()
+    result.map(row => {
+        const user = {
+            userid: row.userid,
+            value: 0
+          };
+      
+          usersArray.push(user);
+        
+    });
+
+    //yesterday date, api limited to the day before
+    const yesterday = moment(new Date(new Date().setDate(new Date().getDate()-1))).format("yyyy-MM-DD")
+
+    for (var userIndex in usersArray){
+        var userid = usersArray[userIndex].userid;
+        const holdings = await db.helpers.getAllUserHoldings(userid)
+        var holdingsArray = [];
+        holdings.map(hold => {
+            const user = {
+                symbol: hold.symbol
+              };
+          
+              holdingsArray.push(hold);
+            
+        });
+        //console.log("holdings: " + JSON.stringify(holdings))
+        let objIndex = usersArray.findIndex(obj => obj.userid == userid);
+        for (const symbolIndex in holdingsArray) {
+            var symbol = holdingsArray[symbolIndex].symbol;
+
+            if(symbol !== 'USD') {
+                var yesterdayClosing = await db.helpers.getSecurityHistory(symbol, yesterday)
+                //Do not have the closing price in cache yet, call api
+                if(JSON.stringify(yesterdayClosing) === '[]') {
+                    let data = await api.polygonApiHelpers.getStockOpenClose(symbol, yesterday)
+
+                    p = await db.helpers.addSecurityHistory(symbol, yesterday, data.open, data.close)
+                    yesterdayClosing = await db.helpers.getSecurityHistory(symbol, yesterday)
+                }
+                let closingPrice = Number(yesterdayClosing[0].price_close)
+
+                const userHolding = await db.helpers.getUserHolding(userid, symbol)
+                let quantity = Number(userHolding[0].quantity);
+                let cost_basis = Number(userHolding[0].cost_basis);
+                
+                let value = (closingPrice - cost_basis) * quantity
+                usersArray[objIndex].value += value;
+            }
+        };
+
+    }
+
+    for (let i = 0; i < usersArray.length; i++) {
+        console.log(usersArray[i].userid + " " + usersArray[i].value);
+    }
+
+    res.status(200).json(usersArray)
+
 })
 
 app.get('/user/holdings', isLoggedIn, async (req, res) => {

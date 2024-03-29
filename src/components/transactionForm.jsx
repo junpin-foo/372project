@@ -45,8 +45,9 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(formData)
+        const backEndpoint = 'http://localhost:3001/';
         try{
-            await fetch('http://localhost:3001/submitTransactionForm', {
+            await fetch(backEndpoint+ 'submitTransactionForm', {
                 method: 'POST',
                 credentials:'include',
                 headers: {
@@ -62,6 +63,9 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList }) {
                 }
                 else if (response.status === 400) {
                     setSubmitStatus({ success: false, error: 'Insufficient funds!' });
+                }
+                else if (response.status === 406) {
+                    setSubmitStatus({ success: false, error: 'Invalid Symbol!' });
                 }
             });
         } catch (error) {
@@ -178,7 +182,7 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList }) {
                         value={formData.date}
                         selected={startDate}
                         onChange={(date) => handleDateChange({target: { name: "date", value: date }})}
-                        maxDate={new Date()}
+                        maxDate={new Date(new Date().setDate(new Date().getDate()-1))}
                         filterDate={isDisabled}
                     />
                 </div>

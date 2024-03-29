@@ -72,7 +72,7 @@ const helpers = {
     addSecurityHistory: async function(symbol, date, open, close) {
         let pool = await getPool();
         //Act as cache for historical data, no need to query api
-        const sql_securities = 'INSERT INTO securities_history (symbol, log_date, price_open, price_close) VALUES ($1, $2, $3, $4) RETURNING *'
+        const sql_securities = 'INSERT INTO securities_history (symbol, log_date, price_open, price_close) VALUES ($1, $2, $3, $4) ON CONFLICT (symbol, log_date) DO NOTHING RETURNING *'
         const res_securities = await pool.query(sql_securities, [symbol, date, open, close])
         return res_securities.rows
     },
@@ -121,6 +121,12 @@ const helpers = {
     addUser: async function(userid,role, pass, manager) {
         const sql_userHolding = 'INSERT INTO users (userid, role_name, password_hash, manager_id) VALUES ($1, $2, $3, $4) RETURNING *'
         const res_userHolding = await pool.query(sql_userHolding, [userid, role, pass, manager])
+        return res_userHolding.rows
+    },
+
+    distinctUserFromHoldings: async function() {
+        const sql_userHolding = 'SELECT DISTINCT userid FROM user_holdings'
+        const res_userHolding = await pool.query(sql_userHolding)
         return res_userHolding.rows
     },
 }

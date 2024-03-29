@@ -4,7 +4,7 @@ function MoneyForm({ symbols, setSymbols, updateUserHoldingsList }) {
     const [formData, setFormData] = useState({
         currency: 'USD',
         amount: '',
-        transaction: 'buy'
+        transaction: 'deposit'
     });
 
     const [submitStatus, setSubmitStatus] = useState({
@@ -23,9 +23,11 @@ function MoneyForm({ symbols, setSymbols, updateUserHoldingsList }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(formData)
+        const backEndpoint = 'http://localhost:3001/';
         try{
-            await fetch('http://localhost:3001/submitMoneyForm', {
+            await fetch(backEndpoint + 'submitMoneyForm', {
                 method: 'POST',
+                credentials:'include',
                 headers: {
                     'Content-Type': 'application/json'
                 },
