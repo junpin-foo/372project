@@ -19,12 +19,14 @@ export default function HomePage({ setLoggedIn }) {
       password: password
     }, {withCredentials:true})
       .then(response => {
-        console.log('Login successful');
+        console.log(response);
         setLoggedIn(true);
         navigate('/dashboard', {
           state: {
             username: email,
-          }
+            role: response.data.message
+          },
+        
         });
       })
       .catch(error => {

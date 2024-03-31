@@ -30,7 +30,7 @@ export default function DashboardPage() {
 
    
     const location = useLocation();
-    const { username } = location.state || {};
+    const { username, role } = location.state || {};
 
     return (
         <main>
@@ -38,7 +38,7 @@ export default function DashboardPage() {
 
             <div className="dashboard container-fluid ">
                 <header className="dashboard-header">
-                    <h1 className="text-center">Dashboard of {username}</h1>
+                    <h1 className="text-center">Dashboard of {role} {username}</h1>
                 </header>
 
                 <div classname="border bg-primary col-12 item1">
