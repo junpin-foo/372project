@@ -1,14 +1,6 @@
-// const { Pool } = require('pg');
-// var pool
-
-// pool = new Pool({
-//     user: 'postgres',
-//     host: 'localhost',
-//     password: '401010abc'
-// })
-
 const { Connector } = require('@google-cloud/cloud-sql-connector')
 const pg = require('pg')
+require('dotenv').config()
 
 const { Pool } = pg;
 
@@ -24,14 +16,14 @@ async function getPool(){
     connector = new Connector();
     const clientOpts = await connector.getOptions({
         instanceConnectionName: 
-            process.env.INSTANCE_CONNECTION_NAME || 'sfu-cmpt372-24spring-project:us-central1:project-pg',
+            process.env.INSTANCE_CONNECTION_NAME,
         ipType: 'PUBLIC',
     });
     pool = new Pool({
         ...clientOpts,
-        user: process.env.DB_USER || 'postgres',
-        password: process.env.DB_PASS || 'root',
-        database: process.env.DB_NAME || 'postgres',
+        user: process.env.DB_USER,
+        password: process.env.DB_PASS,
+        database: process.env.DB_NAME,
     });
     pooled = true;
     return pool;

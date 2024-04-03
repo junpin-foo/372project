@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@google-cloud/cloud-sql-connector": "^1.2.4",
+    "dotenv": "^16.4.5",
     "nodemon": "^3.1.0",
     "pg": "^8.11.3"
   }

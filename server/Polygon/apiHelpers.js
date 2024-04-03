@@ -1,4 +1,6 @@
-const API_KEY = '9fgEfLz33zOGh1IHL6vZngEQakUpWmyr'; //store in env later
+require('dotenv').config()
+
+const API_KEY = process.env.POLYGON_API_KEY
 
 const polygonApiHelpers = {
     getStockOpenClose: async function(symbol, day) {
