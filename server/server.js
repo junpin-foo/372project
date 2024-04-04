@@ -66,7 +66,7 @@ app.post('/login', async(req,res) => {
     const dbUsername = dataUser["userid"]
     var dbPass = dataUser["password_hash"]
 
-        if(username=== dbUsername && bcrypt.compareSync(password, dbPass)){
+    if(username=== dbUsername && bcrypt.compareSync(password, dbPass)){
         
         req.session.user = user
         res.status(200).json({ message: dataUser["role_name"]}); 
@@ -232,9 +232,9 @@ app.get("/ranking", async (req, res) => {
         const user = {
             userid: row.userid,
             value: 0
-          };
-      
-          usersArray.push(user);
+        };
+        
+        usersArray.push(user);
         
     });
 
@@ -248,9 +248,9 @@ app.get("/ranking", async (req, res) => {
         holdings.map(hold => {
             const user = {
                 symbol: hold.symbol
-              };
-          
-              holdingsArray.push(hold);
+            };
+            
+            holdingsArray.push(hold);
             
         });
         //console.log("holdings: " + JSON.stringify(holdings))
