@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+const css = require('nice-forms.css');
 
 function MoneyForm({ symbols, setSymbols, updateUserHoldingsList }) {
     const [formData, setFormData] = useState({
@@ -60,7 +61,7 @@ function MoneyForm({ symbols, setSymbols, updateUserHoldingsList }) {
         <div>
             <h2>Depost/withdrawal Form</h2>
             <form id="money-form" onSubmit={handleSubmit}>
-                <div>
+                <div class="nice-form-group">
                     <label htmlFor="transaction">Transaction:</label>
                     <select
                         id="transaction"
@@ -73,7 +74,7 @@ function MoneyForm({ symbols, setSymbols, updateUserHoldingsList }) {
                         <option value="withdraw">Withdraw</option>
                     </select>
                 </div>
-                <div>
+                <div class="nice-form-group">
                     <label htmlFor="currency">Currency:</label>
                     <select
                         type="text"
@@ -87,7 +88,7 @@ function MoneyForm({ symbols, setSymbols, updateUserHoldingsList }) {
                         <option value="CAD">CAD</option>
                     </select>
                 </div>
-                <div>
+                <div class="nice-form-group">
                     <label htmlFor="amount">Amount:</label>
                     <input
                         type="number"
@@ -98,7 +99,7 @@ function MoneyForm({ symbols, setSymbols, updateUserHoldingsList }) {
                         required
                     />
                 </div>
-                <div>
+                <div class="nice-form-group">
                     <button type="submit">Submit</button>
                 </div>
             </form>

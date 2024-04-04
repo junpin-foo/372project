@@ -51,34 +51,41 @@ export default function SignUp({  }) {
     setManager(selectedValue);
   };
 
+  const handleBack = (event) => {
+    event.preventDefault();
+
+    navigate('/');
+
+  };
+
   return (
     <main className="vh-100 d-flex justify-content-center align-items-center">
       <div className="home-form-container">
         <h1>Sign Up</h1>
 
         <form>
-          <div className="mb-3">
+          <div className="mb-3" class="nice-form-group">
             <label htmlFor="email" className="form-label">Email address</label>
-            <input type="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input type="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
           </div>
 
-          <div className="mb-3">
+          <div className="mb-3" class="nice-form-group">
             <label htmlFor="role" className="form-label">role</label>
-            <select type="text" className="form-control" id="role" value={role} onChange={(e) => setRole(e.target.value)}>
+            <select type="text" className="form-control" id="role" value={role} onChange={(e) => setRole(e.target.value)} required>
             <option value="">Select an Role</option>
             <option value="user">user</option>
             <option value="manager">manager</option>
             </select>
           </div>
 
-          <div className="mb-3">
+          <div className="mb-3" class="nice-form-group">
             <label htmlFor="password" className="form-label">Password</label>
-            <input type="password" className="form-control" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input type="password" className="form-control" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
           </div>
 
-          <div className="mb-3">
+          <div className="mb-3" class="nice-form-group">
             <label htmlFor="manager" className="form-label">Manager</label>
-            <select type="text" className="form-control" id="manager" value={manager} onChange={handleDropdownChange}>
+            <select type="text" className="form-control" id="manager" value={manager} onChange={handleDropdownChange} required>
             <option value="">Select an Manager</option>
                 {items.map((item, index) => (
                     <option key={index} value={item.userid}>{item.userid}</option>
@@ -86,7 +93,8 @@ export default function SignUp({  }) {
             </select>
           </div>
 
-          <button onClick={handleSignup} className="btn btn-success">Sign Up</button>
+          <button onClick={handleSignup} className="btn">Sign Up</button>
+          <button onClick={handleBack} className="btn-back">Back</button>
         </form>
       </div>
     </main>

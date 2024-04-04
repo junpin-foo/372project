@@ -13,6 +13,7 @@
     "crypto-browserify": "^3.12.0",
     "express-session": "^1.18.0",
     "moment": "^2.30.1",
+    "nice-forms.css": "^0.1.7",
     "pg": "^8.11.3",
     "querystring": "^0.2.1",
     "react": "^18.2.0",

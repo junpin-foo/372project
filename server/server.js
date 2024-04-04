@@ -69,7 +69,7 @@ app.post('/login', async(req,res) => {
         if(username=== dbUsername && bcrypt.compareSync(password, dbPass)){
         
         req.session.user = user
-        res.status(200).json({ message: 'Login successful' }); 
+        res.status(200).json({ message: dataUser["role_name"]}); 
     }
     else {
         res.status(401).json({ error: 'Invalid username or password' });

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+const css = require('nice-forms.css');
 
 
 export default function HomePage({ setLoggedIn }) {
@@ -19,12 +20,14 @@ export default function HomePage({ setLoggedIn }) {
       password: password
     }, {withCredentials:true})
       .then(response => {
-        console.log('Login successful');
+        console.log(response);
         setLoggedIn(true);
         navigate('/dashboard', {
           state: {
             username: email,
-          }
+            role: response.data.message
+          },
+        
         });
       })
       .catch(error => {
@@ -45,18 +48,18 @@ export default function HomePage({ setLoggedIn }) {
         <h1>Login</h1>
 
         <form>
-          <div className="mb-3">
+          <div className="mb-3" class="nice-form-group">
             <label htmlFor="email" className="form-label">Email address</label>
-            <input type="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input type="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
           </div>
 
-          <div className="mb-3">
+          <div className="mb-3" class="nice-form-group">
             <label htmlFor="password" className="form-label">Password</label>
-            <input type="password" className="form-control" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input type="password" className="form-control" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
           </div>
 
-          <button onClick={handleLogin} className="btn btn-success">Login</button>
-          <button onClick={handleSign} className="btn btn-success">Sign Up</button>
+          <button class="btn" onClick={handleLogin} className="btn">Login</button>
+          <button class="btn" onClick={handleSign} className="btn">Sign Up</button>
         </form>
       </div>
     </main>
