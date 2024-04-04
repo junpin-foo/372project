@@ -263,6 +263,15 @@ app.get("/ranking", async (req, res) => {
                 //Do not have the closing price in cache yet, call api
                 if(JSON.stringify(yesterdayClosing) === '[]') {
                     let data = await api.polygonApiHelpers.getStockOpenClose(symbol, yesterday)
+                    //Run of of credits, will create security history closing price entry of value 0
+                    if (data.status == "NOT_FOUND" || data.status == "ERROR") {
+                        const error = createHttpError(500, "Internal Server error, out of credits", {
+                            headers: {
+                                "X-Custom-Header": "Value"
+                            }
+                        });
+                        return next(error);
+                    } 
 
                     p = await db.helpers.addSecurityHistory(symbol, yesterday, data.open, data.close)
                     yesterdayClosing = await db.helpers.getSecurityHistory(symbol, yesterday)
