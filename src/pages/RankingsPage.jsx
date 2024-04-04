@@ -11,79 +11,50 @@ export default function RankingsPage() {
 
         axios.get(backEndpoint + 'ranking', {withCredentials:true})
             .then(response => {
-                const data = response.data
-                console.log(data)
-                setSymbols(data);
+                const data = response.data;
+                console.log(data);
+
+                if (data.length <= 0) {
+                    return;
+                }
+
+                setSymbols(
+                    data.sort((a, b) => {
+                        return a.value - b.value;
+                    }),
+                );
             })
             .catch(error => {
                 console.error(error)
             })
     }
 
-    updateUserHoldingsList()
+    useEffect(() => {
+        updateUserHoldingsList()
+    }, [])
 
     return (
         <main>
             <Navbar />
 
             <header>
-                <h1 className="text-center">Rankings</h1>
+                <h1 className="text-center">User Rankings</h1>
             </header>
 
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">#</th>
-                        <th scope="col">#</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Value</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>#</td>
-                        <td>#</td>
-                        <td>#</td>
-                    </tr>
-                    <tr>
-                        <td>#</td>
-                        <td>#</td>
-                        <td>#</td>
-                    </tr>
-                    <tr>
-                        <td>#</td>
-                        <td>#</td>
-                        <td>#</td>
-                    </tr>
-                    <tr>
-                        <td>#</td>
-                        <td>#</td>
-                        <td>#</td>
-                    </tr>
-                    <tr>
-                        <td>#</td>
-                        <td>#</td>
-                        <td>#</td>
-                    </tr>
-                    <tr>
-                        <td>#</td>
-                        <td>#</td>
-                        <td>#</td>
-                    </tr>
-                    <tr>
-                        <td>#</td>
-                        <td>#</td>
-                        <td>#</td>
-                    </tr>
-                    <tr>
-                        <td>#</td>
-                        <td>#</td>
-                        <td>#</td>
-                    </tr>
-                    <tr>
-                        <td>#</td>
-                        <td>#</td>
-                        <td>#</td>
-                    </tr>
+                    {symbols.map(symbol => (
+                        <tr>
+                            <td>{symbol.userid}</td>
+                            <td>{symbol.value}</td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </main>
