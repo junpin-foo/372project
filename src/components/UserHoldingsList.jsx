@@ -6,7 +6,7 @@ export default function UserHoldingsList({ setSymbols, symbols, username }) {
         <div>
             <h2>Holdings</h2>
             {symbols.map(symbol => (
-                <ul >
+                <ul key={symbol.symbol}>
                     <li> <strong>{symbol.symbol}:</strong> </li>
                     <ul>
                         {symbol.symbol !== "USD" && symbol.symbol !== "CAD" && <li>Quantity: {symbol.quantity}</li>}
