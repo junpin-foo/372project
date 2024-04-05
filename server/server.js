@@ -46,7 +46,6 @@ app.get('/getAllUsers', async(req,res) => {
     res.json(users)
 })
 
-
 app.post('/signup', async(req,res) => {
     const username = req.body.username;
     const password = req.body.password;
@@ -307,6 +306,11 @@ app.get('/user/holdings', isLoggedIn, async (req, res) => {
     }
     const data = await db.helpers.getAllUserHoldings(user)
     res.status(200).json(data)
+})
+
+app.get('/manager/managedUsers', isLoggedIn, async (req, res) => {
+    const _res = await db.helpers.getManagedUsers(req.session.user.username)
+    res.status(200).json(_res)
 })
 
 app.post('/logout',isLoggedIn, async(req,res)=>{

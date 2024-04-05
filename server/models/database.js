@@ -110,6 +110,12 @@ const helpers = {
         return res_userHolding.rows
     },
 
+    getManagedUsers: async function(manager_id) {
+        const query = 'SELECT userid FROM users WHERE manager_id = $1'
+        const res = await pool.query(query, [manager_id])
+        return res.rows
+    },
+
     addUser: async function(userid,role, pass, manager) {
         const sql_userHolding = 'INSERT INTO users (userid, role_name, password_hash, manager_id) VALUES ($1, $2, $3, $4) RETURNING *'
         const res_userHolding = await pool.query(sql_userHolding, [userid, role, pass, manager])
