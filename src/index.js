@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Outlet, Route, Routes, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
+import ManagerPage from './pages/ManagerPage'
 import DashboardPage from './pages/DashboardPage';
 import RankingsPage from './pages/RankingsPage';
 import SignUp from './pages/SignUpPage';
@@ -18,12 +19,13 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
-  
+
     return (
         <React.StrictMode>
         <BrowserRouter>
             <Routes>
                 <Route element={<PrivateRoutes loggedIn = {loggedIn} /> }>
+                    <Route path="/manager" element={<ManagerPage />} />
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/rankings" element={<RankingsPage />} />
                 </Route>
