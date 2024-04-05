@@ -68,7 +68,7 @@ app.post('/login', async(req,res) => {
 
     if(username=== dbUsername && bcrypt.compareSync(password, dbPass)){
         
-        req.session.user = user
+        req.session.user = {...user, role: dataUser["role_name"]}
         res.status(200).json({ message: dataUser["role_name"]}); 
     }
     else {
@@ -298,10 +298,13 @@ app.get("/ranking", async (req, res) => {
 })
 
 app.get('/user/holdings', isLoggedIn, async (req, res) => {
-    console.log('Fetching User Holdings')
-    const user = req.session.user.username
-
-
+    let user;
+    if(req.session.user.role == 'manager'){
+        user = req.query.username
+    }
+    else{
+        user = req.session.user.username
+    }
     const data = await db.helpers.getAllUserHoldings(user)
     res.status(200).json(data)
 })
