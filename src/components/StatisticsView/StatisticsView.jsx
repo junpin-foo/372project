@@ -76,12 +76,12 @@ export default function StatisticsView({holdings}){
     }, [holdings])
 
     return (
-        <div>
+        <div className='StatisticsView'>
             <h2>Summary</h2>
             <ul>
                 <li>Total Value: {stats.total}</li>
-                <li>Cash Balance: {stats.cashVal} ({stats.cashPct}% of Total)</li>
-                <li>Holdings Value: {stats.secVal} ({stats.secPct}% of Total)</li>
+                <li>Cash Balance: {stats.cashVal} ({stats.cashPct}%)</li>
+                <li>Holdings Value: {stats.secVal} ({stats.secPct}%)</li>
             </ul>
         </div>
     )
