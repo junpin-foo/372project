@@ -2,7 +2,7 @@ import Navbar from '../components/Navbar';
 import TransactionForm from '../components/transactionForm';
 import MoneyForm from '../components/moneyForm';
 import UserHoldingsList from '../components/UserHoldingsList';
-import Modal from '../components/Modal';
+import Modal from '../components/Modal/Modal';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
