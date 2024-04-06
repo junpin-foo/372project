@@ -6,6 +6,7 @@ import Modal from '../components/Modal/Modal';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import StatisticsView from '../components/StatisticsView/StatisticsView';
 
 export default function DashboardPage() {
     const [symbols, setSymbols] = useState({});
@@ -98,7 +99,10 @@ export default function DashboardPage() {
                 <h2>User Details: {modal.username}</h2>
                 {
                     modal.symbols.length > 1 ?
-                        <UserHoldingsList symbols={modal.symbols} setSymbols={null} username={null}/>
+                        <div>
+                            <StatisticsView holdings={modal.symbols} />
+                            <UserHoldingsList symbols={modal.symbols} setSymbols={null} username={null}/>
+                        </div>
                     :   <p>User has no holdings.</p>
                 }
                 {
