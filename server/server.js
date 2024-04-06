@@ -301,6 +301,16 @@ app.get("/ranking", async (req, res) => {
 
 })
 
+app.get('/currency/list', async (req, res) => {
+    const data = await db.helpers.getCurrencyList()
+    res.status(200).json(data)
+})
+
+app.get('/currency/ratelist', async (req, res) => {
+    const data = await db.helpers.getCurrencyRateList()
+    res.status(200).json(data)
+})
+
 app.get('/user/holdings', isLoggedIn, async (req, res) => {
     let user;
     if(req.session.user.role == 'manager'){
