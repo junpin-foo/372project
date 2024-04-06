@@ -128,8 +128,13 @@ app.post("/submitTransactionForm", async (req, res, next) => {
     let price = req.body.price
     let date = req.body.date
 
-    let user = req.session.user.username
-
+    let user;
+    if(req.session.user.role = "manager"){
+        user = req.body.onBehalfOf
+    }
+    else{
+        user = req.session.user.username
+    }
 
     //Insert into securities table if not exist
     await db.helpers.addSecurities(ticker_symbol, ticker_class, ticker_currency)

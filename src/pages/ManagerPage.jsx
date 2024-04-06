@@ -28,6 +28,9 @@ export default function DashboardPage() {
     }
 
     function getManagedUserHoldings(user_id) {
+        if(user_id === undefined){
+            user_id = modal.username
+        }
         axios.defaults.withCredentials = true;
         axios.get(backEndpoint + 'user/holdings', {
             params: {username: user_id},
@@ -51,7 +54,7 @@ export default function DashboardPage() {
     }, []);
 
     useEffect(() => {
-        if(modal.shown == false){
+        if(modal.shown === false){
             setModalVisbility(true);
             setModal({...modal, shown: true})
         }
@@ -61,8 +64,8 @@ export default function DashboardPage() {
     const { username } = location.state || {};
 
     function displayModal(e){
-        let user_id = e.target.getAttribute('data-uid');
         try{
+            let user_id = e.target.getAttribute('data-uid');
             getManagedUserHoldings(user_id);
         }
         catch(e){
@@ -97,6 +100,9 @@ export default function DashboardPage() {
                     modal.symbols.length > 1 ?
                         <UserHoldingsList symbols={modal.symbols} setSymbols={null} username={null}/>
                     :   <p>User has no holdings.</p>
+                }
+                {
+                    <TransactionForm updateUserHoldingsList={getManagedUserHoldings} onBehalfOf={modal.username} symbols={null} setSymbols={null}/>
                 }
             </Modal>
         </main>
