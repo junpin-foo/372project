@@ -9,7 +9,6 @@ import { useState, useEffect } from 'react';
 import StatisticsView from '../components/StatisticsView/StatisticsView';
 
 export default function DashboardPage() {
-    const [symbols, setSymbols] = useState({});
     const [managedUsers, setManagedUsers] = useState([]);
     const [modal, setModal] = useState({username: null, symbols: [], shown: true});
     const [modalVisible, setModalVisbility] = useState(false)
