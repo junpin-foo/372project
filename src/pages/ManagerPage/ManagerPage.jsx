@@ -1,14 +1,14 @@
-import Navbar from '../components/Navbar';
-import TransactionForm from '../components/transactionForm';
-import MoneyForm from '../components/moneyForm';
-import UserHoldingsList from '../components/UserHoldingsList';
-import Modal from '../components/Modal/Modal';
+import Navbar from '../../components/Navbar';
+import TransactionForm from '../../components/transactionForm';
+import UserHoldingsList from '../../components/UserHoldingsList';
+import Modal from '../../components/Modal/Modal';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import StatisticsView from '../components/StatisticsView/StatisticsView';
+import StatisticsView from '../../components/StatisticsView/StatisticsView';
+import './ManagerPage.css'
 
-export default function DashboardPage() {
+export default function ManagerPage() {
     const [managedUsers, setManagedUsers] = useState([]);
     const [modal, setModal] = useState({username: null, symbols: [], shown: true});
     const [modalVisible, setModalVisbility] = useState(false)
@@ -77,19 +77,20 @@ export default function DashboardPage() {
         <main>
             <Navbar isManager={true}/>
 
-            <div className="dashboard container-fluid ">
+            <div className='managerPage' /* className="dashboard container-fluid " */>
                 <header className="dashboard-header">
                     <h1 className="text-center">Dashboard of Manager {username}</h1>
                 </header>
 
-                <div className="border bg-success col-12 grid-container item3">
+                <div /* className="border bg-success col-12 grid-container item3" */>
                     <h2> Managed Users: </h2>
                     {managedUsers.map((user) => {
                         return (
-                            <ul key={user.userid}>
-                                {user.userid}
-                                <button key={user.userid} data-uid={user.userid} onClick={displayModal}>View holdings</button>
-                            </ul>
+                                <ul className='userCell' key={user.userid}>
+                                    <p className='uid'>{user.userid}</p>
+                                    <button className='view' key={user.userid} data-uid={user.userid} onClick={displayModal}>View holdings</button>
+                                </ul>
+                                
                         )
                     })}
                 </div>

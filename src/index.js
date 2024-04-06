@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Outlet, Route, Routes, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import ManagerPage from './pages/ManagerPage'
+import ManagerPage from './pages/ManagerPage/ManagerPage'
 import DashboardPage from './pages/DashboardPage';
 import RankingsPage from './pages/RankingsPage';
 import SignUp from './pages/SignUpPage';
