@@ -7,6 +7,7 @@ const css = require('nice-forms.css');
 export default function HomePage({ setLoggedIn }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const backEndpoint = 'http://localhost:3001/';
@@ -34,7 +35,8 @@ export default function HomePage({ setLoggedIn }) {
         }
       })
       .catch(error => {
-
+        console.log(error.response.data.error)
+        setError(error.response.data.error)
       });
   };
 
@@ -64,6 +66,8 @@ export default function HomePage({ setLoggedIn }) {
           <button className="btn" onClick={handleLogin} className="btn">Login</button>
           <button className="btn" onClick={handleSign} className="btn">Sign Up</button>
         </form>
+        <br></br>
+        {error && <label>Error: {error}</label>}
       </div>
     </main>
   );

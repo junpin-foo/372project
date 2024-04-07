@@ -21,10 +21,11 @@ app.use(cors({
 
 app.use(session({
     name: 'nsession',
-    secret: 'secret_string',
+    //Random string
+    secret: '764f7f2d6497c0d87d1dba58ac2d8e1d',
     resave: false,
     saveUninitialized: false,
-    maxAge: 1000*60*60, 
+    maxAge: 1000*60*60*60, 
     cookie:{
         secure:false
 
@@ -51,7 +52,6 @@ app.post('/signup', async(req,res) => {
     const password = req.body.password;
     const manager = req.body.manager;
     const role = req.body.role;
-    console.log(password)
     var users = (await db.helpers.addUser(username, role,password,manager))
 
     res.status(200).json({ message: 'Signup successful' }); 
@@ -61,17 +61,26 @@ app.post('/login', async(req,res) => {
     const username = req.body.username;
     const password = req.body.password;
     user = {username: username, password: password}
-    var dataUser = (await db.helpers.getUser(username))[0]
-    const dbUsername = dataUser["userid"]
-    var dbPass = dataUser["password_hash"]
+    var dataUser = (await db.helpers.getUser(username))
 
-    if(username=== dbUsername && bcrypt.compareSync(password, dbPass)){
+    if(dataUser.length != 0){
         
-        req.session.user = {...user, role: dataUser["role_name"]}
-        res.status(200).json({ message: dataUser["role_name"]}); 
-    }
-    else {
-        res.status(401).json({ error: 'Invalid username or password' });
+    
+
+        dataUser = dataUser[0]
+        const dbUsername = dataUser["userid"]
+        var dbPass = dataUser["password_hash"]
+
+        if(username=== dbUsername && bcrypt.compareSync(password, dbPass)){
+            
+            req.session.user = {...user, role: dataUser["role_name"]}
+            res.status(200).json({ message: dataUser["role_name"]}); 
+        }
+        else {
+            res.status(401).json({ error: 'Invalid password' });
+        }
+    }else{
+        res.status(401).json({ error: 'Invalid username' });
     }
 })
 
