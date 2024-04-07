@@ -9,7 +9,7 @@ export default function RankingsTable({ symbols }) {
             </thead>
             <tbody>
                 {symbols.map(symbol => (
-                    <tr>
+                    <tr key={symbol.userid}>
                         <td>{symbol.userid}</td>
                         <td>{symbol.value}</td>
                     </tr>

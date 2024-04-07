@@ -28,7 +28,6 @@ export default function DashboardPage() {
         updateUserHoldingsList();
     }, []);
 
-   
     const location = useLocation();
     const { username, role } = location.state || {};
 
@@ -36,23 +35,24 @@ export default function DashboardPage() {
         <main>
             <Navbar />
 
-            <div className="dashboard container-fluid ">
-                <header className="dashboard-header">
-                    <h1 className="text-center">Dashboard of {role} {username}</h1>
-                </header>
+            <header className="dashboard-header">
+                <h1 className="text-center">Dashboard of {role} {username}</h1>
+            </header>
 
-                <div classname="border bg-primary col-12 item1">
+
+            <UserHoldingsList symbols={symbols} setSymbols={setSymbols} username={username} />
+
+            <div className="container-fluid ">
+                <div className="border bg-success col-12 grid-container item3">
+                </div>
+
+                <div className="border col-12 item1">
                     <TransactionForm updateUserHoldingsList={updateUserHoldingsList} symbols={symbols} setSymbols={setSymbols} />
                 </div>
 
-                <div classname="border bg-primary col-12 grid-container item2">
+                <div className="border col-12 grid-container item2">
                     <MoneyForm updateUserHoldingsList={updateUserHoldingsList} symbols={symbols} setSymbols={setSymbols} />
                 </div>
-
-                <div className="border bg-success col-12 grid-container item3">
-                    <UserHoldingsList symbols={symbols} setSymbols={setSymbols} username={username} />
-                </div>
-
             </div>
         </main>
     );
