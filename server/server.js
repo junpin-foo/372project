@@ -64,8 +64,6 @@ app.post('/login', async(req,res) => {
     var dataUser = (await db.helpers.getUser(username))
 
     if(dataUser.length != 0){
-        
-    
 
         dataUser = dataUser[0]
         const dbUsername = dataUser["userid"]
@@ -84,7 +82,7 @@ app.post('/login', async(req,res) => {
     }
 })
 
-app.post("/submitMoneyForm", async (req, res, next) => {
+app.post("/submitMoneyForm",isLoggedIn,  async (req, res, next) => {
     //User form data
     let transaction = req.body.transaction //withdraw / deposit
     let currency = req.body.currency
@@ -127,7 +125,7 @@ app.post("/submitMoneyForm", async (req, res, next) => {
     res.status(204).send();
 })
 
-app.post("/submitTransactionForm", async (req, res, next) => {
+app.post("/submitTransactionForm", isLoggedIn, async (req, res, next) => {
     //User form data
     let transaction = req.body.transaction //Bought OR Sold
     let ticker_symbol = req.body.tickerSymbol
@@ -237,7 +235,7 @@ app.post("/submitTransactionForm", async (req, res, next) => {
     res.status(204).send();
 })
 
-app.get("/ranking", async (req, res, next) => {
+app.get("/ranking", isLoggedIn, async (req, res, next) => {
     const usersArray = [];
 
     const result = await db.helpers.distinctUserFromHoldings()
@@ -310,12 +308,12 @@ app.get("/ranking", async (req, res, next) => {
 
 })
 
-app.get('/currency/list', async (req, res) => {
+app.get('/currency/list', isLoggedIn,  async (req, res) => {
     const data = await db.helpers.getCurrencyList()
     res.status(200).json(data)
 })
 
-app.get('/currency/ratelist', async (req, res) => {
+app.get('/currency/ratelist', isLoggedIn,  async (req, res) => {
     const data = await db.helpers.getCurrencyRateList()
     res.status(200).json(data)
 })

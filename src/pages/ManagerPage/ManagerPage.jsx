@@ -17,7 +17,7 @@ export default function ManagerPage() {
     function getManagedUsersList() {
         axios.defaults.withCredentials = true;
 
-        axios.get(backEndpoint + 'manager/managedUsers')
+        axios.get(backEndpoint + 'manager/managedUsers', {withCredentials:true})
             .then(response => {
                 const data = response.data
                 setManagedUsers(data);
