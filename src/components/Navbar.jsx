@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 export default function Navbar() {
     const backEndpoint = 'http://localhost:3001/';
     const navigate = useNavigate();
@@ -19,6 +19,9 @@ export default function Navbar() {
           });
       };
 
+      const location = useLocation();
+      const state = location.state || {}
+      const {role} = state;
 
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -30,8 +33,12 @@ export default function Navbar() {
 
                 <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div className="navbar-nav">
-                        <Link to="/dashboard" className="nav-link" href="#">Dashboard</Link>
-                        <Link to="/rankings" className="nav-link" href="#">Rankings</Link>
+                        {role == "manager" ? 
+                            <Link to={{pathname: "/manager"}} state={state} className="nav-link" href="#">Dashboard</Link>
+                        :   <Link to={{pathname: "/dashboard"}} state={state} className="nav-link" href="#">Dashboard</Link>
+                        }
+                        {/* <Link to="/dashboard" className="nav-link" href="#">Dashboard</Link> */}
+                        <Link to={{pathname: "/rankings"}} state={state} className="nav-link" href="#">Rankings</Link>
                     </div>
                 </div>
 

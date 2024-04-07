@@ -1,0 +1,31 @@
+.managerPage{
+    padding: 2em
+}
+
+.managerPage .userCell{
+    display: block;
+    /* width: 200px; */
+    border: black solid 1px;
+    padding: .75em;
+    margin-top: .5em;
+    margin-bottom: .5em;
+    border-radius: 6px;
+}
+
+.managerPage .userCell .uid{
+    display: block;
+    width: 200px;
+}
+.managerPage .userCell .view{
+    display: block;
+    width: fit-content;
+    border-radius: 4px;
+}
+
+.managerModal .modalCell{
+    border: black solid 1px;
+    border-radius: 1em;
+    padding: 1em;
+    margin-top: .5em;
+    margin-bottom: .5em;
+}

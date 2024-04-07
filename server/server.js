@@ -46,7 +46,6 @@ app.get('/getAllUsers', async(req,res) => {
     res.json(users)
 })
 
-
 app.post('/signup', async(req,res) => {
     const username = req.body.username;
     const password = req.body.password;
@@ -68,7 +67,7 @@ app.post('/login', async(req,res) => {
 
     if(username=== dbUsername && bcrypt.compareSync(password, dbPass)){
         
-        req.session.user = user
+        req.session.user = {...user, role: dataUser["role_name"]}
         res.status(200).json({ message: dataUser["role_name"]}); 
     }
     else {
@@ -129,8 +128,13 @@ app.post("/submitTransactionForm", async (req, res, next) => {
     let price = req.body.price
     let date = req.body.date
 
-    let user = req.session.user.username
-
+    let user;
+    if(req.session.user.role = "manager"){
+        user = req.body.onBehalfOf
+    }
+    else{
+        user = req.session.user.username
+    }
 
     //Insert into securities table if not exist
     await db.helpers.addSecurities(ticker_symbol, ticker_class, ticker_currency)
@@ -297,13 +301,31 @@ app.get("/ranking", async (req, res, next) => {
 
 })
 
+app.get('/currency/list', async (req, res) => {
+    const data = await db.helpers.getCurrencyList()
+    res.status(200).json(data)
+})
+
+app.get('/currency/ratelist', async (req, res) => {
+    const data = await db.helpers.getCurrencyRateList()
+    res.status(200).json(data)
+})
+
 app.get('/user/holdings', isLoggedIn, async (req, res) => {
-    console.log('Fetching User Holdings')
-    const user = req.session.user.username
-
-
+    let user;
+    if(req.session.user.role == 'manager'){
+        user = req.query.username
+    }
+    else{
+        user = req.session.user.username
+    }
     const data = await db.helpers.getAllUserHoldings(user)
     res.status(200).json(data)
+})
+
+app.get('/manager/managedUsers', isLoggedIn, async (req, res) => {
+    const _res = await db.helpers.getManagedUsers(req.session.user.username)
+    res.status(200).json(_res)
 })
 
 app.post('/logout',isLoggedIn, async(req,res)=>{

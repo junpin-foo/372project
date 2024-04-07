@@ -4,7 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import moment from "moment/moment";
 const css = require('nice-forms.css');
 
-function TransactionForm({ symbols, setSymbols, updateUserHoldingsList }) {
+function TransactionForm({ symbols, setSymbols, updateUserHoldingsList, onBehalfOf }) {
     const [formData, setFormData] = useState({
         tickerSymbol: '',
         tickerClass: 'stocks',
@@ -54,7 +54,12 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList }) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(formData)
+                body: onBehalfOf === undefined ? 
+                    JSON.stringify(formData) : 
+                    JSON.stringify({
+                        ...formData,
+                        onBehalfOf: onBehalfOf
+                    })
             }).then( response => {
                 if(response.ok) {
                     setSubmitStatus({ success: true, error: '' });

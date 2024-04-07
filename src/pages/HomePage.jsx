@@ -20,15 +20,18 @@ export default function HomePage({ setLoggedIn }) {
       password: password
     }, {withCredentials:true})
       .then(response => {
-        console.log(response);
         setLoggedIn(true);
-        navigate('/dashboard', {
-          state: {
+        let role = response.data.message;
+        let state = {
             username: email,
             role: response.data.message
-          },
-        
-        });
+        }
+        if(role == 'manager'){
+            navigate('/manager', {state: state})
+        }
+        else{
+            navigate('/dashboard', {state: state});
+        }
       })
       .catch(error => {
 

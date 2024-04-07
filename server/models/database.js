@@ -69,6 +69,20 @@ const helpers = {
         return res_securities.rows
     },
 
+    getCurrencyList: async function() {
+        let pool = await getPool();
+        const query = 'SELECT code FROM currencies'
+        const res = await pool.query(query)
+        return res.rows
+    },
+
+    getCurrencyRateList: async function() {
+        let pool = await getPool();
+        const query = 'SELECT currency_from, currency_to, rate FROM exchange_rate'
+        const res = await pool.query(query)
+        return res.rows
+    },
+
     getAllUserHoldings: async function(user) {
         let pool = await getPool();
         const sql_allUserHoldings = 'SELECT * FROM user_holdings WHERE userid = $1'
@@ -108,6 +122,12 @@ const helpers = {
         const sql_userHolding = 'SELECT userid from users'
         const res_userHolding = await pool.query(sql_userHolding)
         return res_userHolding.rows
+    },
+
+    getManagedUsers: async function(manager_id) {
+        const query = 'SELECT userid FROM users WHERE manager_id = $1'
+        const res = await pool.query(query, [manager_id])
+        return res.rows
     },
 
     addUser: async function(userid,role, pass, manager) {
