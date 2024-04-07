@@ -228,7 +228,7 @@ app.post("/submitTransactionForm", async (req, res, next) => {
     res.status(204).send();
 })
 
-app.get("/ranking", async (req, res) => {
+app.get("/ranking", async (req, res, next) => {
     const usersArray = [];
 
     const result = await db.helpers.distinctUserFromHoldings()
@@ -257,7 +257,7 @@ app.get("/ranking", async (req, res) => {
             holdingsArray.push(hold);
             
         });
-        //console.log("holdings: " + JSON.stringify(holdings))
+        console.log("holdings: " + JSON.stringify(holdings))
         let objIndex = usersArray.findIndex(obj => obj.userid == userid);
         for (const symbolIndex in holdingsArray) {
             var symbol = holdingsArray[symbolIndex].symbol;

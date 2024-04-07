@@ -51,18 +51,18 @@ export default function HomePage({ setLoggedIn }) {
         <h1>Login</h1>
 
         <form>
-          <div className="mb-3" class="nice-form-group">
+          <div className="mb-3" className="nice-form-group">
             <label htmlFor="email" className="form-label">Email address</label>
             <input type="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
           </div>
 
-          <div className="mb-3" class="nice-form-group">
+          <div className="mb-3" className="nice-form-group">
             <label htmlFor="password" className="form-label">Password</label>
             <input type="password" className="form-control" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
           </div>
 
-          <button class="btn" onClick={handleLogin} className="btn">Login</button>
-          <button class="btn" onClick={handleSign} className="btn">Sign Up</button>
+          <button className="btn" onClick={handleLogin} className="btn">Login</button>
+          <button className="btn" onClick={handleSign} className="btn">Sign Up</button>
         </form>
       </div>
     </main>

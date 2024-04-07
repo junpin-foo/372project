@@ -1,9 +1,12 @@
 import Navbar from '../components/Navbar';
+import RankingsTable from '../components/RankingsTable';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 export default function RankingsPage() {
     const [symbols, setSymbols] = useState([]);
+    const [isLoading, setLoading] = useState(true);
+
     const backEndpoint = 'http://localhost:3001/';
 
     function updateUserHoldingsList() {
@@ -18,11 +21,11 @@ export default function RankingsPage() {
                     return;
                 }
 
-                setSymbols(
-                    data.sort((a, b) => {
-                        return a.value - b.value;
-                    }),
-                );
+                data.sort((a, b) => {
+                    return a.value - b.value;
+                });
+                setSymbols(data.reverse());
+                setLoading(false);
             })
             .catch(error => {
                 console.error(error)
@@ -31,7 +34,7 @@ export default function RankingsPage() {
 
     useEffect(() => {
         updateUserHoldingsList()
-    }, [])
+    }, []);
 
     return (
         <main>
@@ -41,22 +44,13 @@ export default function RankingsPage() {
                 <h1 className="text-center">User Rankings</h1>
             </header>
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">User</th>
-                        <th scope="col">Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {symbols.map(symbol => (
-                        <tr>
-                            <td>{symbol.userid}</td>
-                            <td>{symbol.value}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            {!isLoading ?
+             <RankingsTable symbols={symbols} />
+             : <div className="container text-center mt-5">
+                   <div className="spinner-border" role="status">
+                       <span className="visually-hidden">Loading...</span>
+                   </div>
+               </div>}
         </main>
     );
 }
