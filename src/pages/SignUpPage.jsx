@@ -26,7 +26,6 @@ export default function SignUp({  }) {
   const handleSignup = (event) => {
     event.preventDefault();
     const  p = bcrypt.hashSync(password, 10)
-    console.log(p)
 
     axios.post(backEndpoint + "signup", {
       username: email,
