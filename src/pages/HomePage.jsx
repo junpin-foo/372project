@@ -35,7 +35,6 @@ export default function HomePage({ setLoggedIn }) {
         }
       })
       .catch(error => {
-        console.log(error.response.data.error)
         setError(error.response.data.error)
       });
   };
