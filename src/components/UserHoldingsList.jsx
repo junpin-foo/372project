@@ -10,8 +10,8 @@ export default function UserHoldingsList({ setSymbols, symbols, username }) {
                     <li> <strong>{symbol.symbol}:</strong> </li>
                     <ul>
                         {symbol.symbol !== "USD" && symbol.symbol !== "CAD" && <li>Quantity: {symbol.quantity}</li>}
-                        {symbol.symbol !== "USD" && symbol.symbol !== "CAD" && <li>Currency: {symbol.currency}</li>}
-                        <li>{symbol.symbol === "USD" || symbol.symbol === "CAD"? 'Amount: ' : 'Avg Cost: '}{symbol.cost_basis}</li>
+                        {/* {symbol.symbol !== "USD" && symbol.symbol !== "CAD" && <li>Currency: {symbol.currency}</li>} */}
+                        <li>{symbol.symbol === "USD" || symbol.symbol === "CAD"? 'Amount: ' : 'Avg. Cost: '}{symbol.cost_basis} {symbol.currency}</li>
                     </ul>
                 </ul>
             ))}

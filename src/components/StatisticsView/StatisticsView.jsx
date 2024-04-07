@@ -7,7 +7,7 @@ export default function StatisticsView({holdings}){
     const [stats, setStats] = useState({total: 0, cashVal: 0, secVal: 0, cashPct: 0, secPct: 0})
     const backEndpoint = 'http://localhost:3001/';
     const decimalPrecision = 3;
-
+    let baseCurrency = "USD"
     const getCurrencyList = () => {
         axios.defaults.withCredentials = true;
         axios.get(backEndpoint + 'currency/list')
@@ -79,9 +79,9 @@ export default function StatisticsView({holdings}){
         <div className='StatisticsView'>
             <h2>Summary</h2>
             <ul>
-                <li>Total Value: {stats.total}</li>
-                <li>Cash Balance: {stats.cashVal} ({stats.cashPct}%)</li>
-                <li>Holdings Value: {stats.secVal} ({stats.secPct}%)</li>
+                <li>Total Value: {stats.total} {baseCurrency}</li>
+                <li>Cash Balance: {stats.cashVal} {baseCurrency} ({stats.cashPct}%)</li>
+                <li>Holdings Value: {stats.secVal} {baseCurrency} ({stats.secPct}%)</li>
             </ul>
         </div>
     )
