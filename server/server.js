@@ -81,7 +81,7 @@ app.post('/login', async(req,res) => {
     }
 })
 
-app.post("/submitMoneyForm",isLoggedIn,  async (req, res, next) => {
+app.post("/submitMoneyForm", isLoggedIn, async (req, res, next) => {
     //User form data
     let transaction = req.body.transaction //withdraw / deposit
     let currency = req.body.currency
@@ -91,25 +91,34 @@ app.post("/submitMoneyForm",isLoggedIn,  async (req, res, next) => {
 
     console.log(req.body)
 
+    //Covert CAD to USD
+    if(currency == "CAD") {
+        amount = Number((amount / 1.36).toFixed(2));
+    }
+
     //**Ensure cash is auto created when user created**
     //symbol = USD/CAD, Quantity = 1, cash_basis = value
-    let user_holding_cash = await db.helpers.getUserHolding(user, currency)
+    let user_holding_cash = await db.helpers.getUserHolding(user, "USD")
 
     //If no CASH entry create one
     if(JSON.stringify(user_holding_cash) === '[]') {
         //Initialize new entry - for cash
-        user_holding = await db.helpers.addUserHolding(user, "USD", 1, 0, currency)
+        user_holding_cash = await db.helpers.addUserHolding(user, "USD", 1, 0, "USD")
     }
 
     if(transaction == "deposit") {
         let current_cash = Number(user_holding_cash[0].cost_basis)
-        let new_cash = current_cash + amount;
+        console.log("Amount:" + amount)
+        console.log("current cash:" + current_cash)
+        let new_cash = Number((current_cash + amount).toFixed(2));
         let user_holding_sell_cash = await db.helpers.updateUserHolding(user, "USD", 1, new_cash)
 
     } 
     else if (transaction == "withdraw") {
         let current_cash = Number(user_holding_cash[0].cost_basis)
-        let new_cash = current_cash - amount;
+        console.log("Amount:" + amount)
+        console.log("current cash:" + current_cash)
+        let new_cash = Number((current_cash - amount).toFixed(2));
         if(new_cash < 0) {
             const error = createHttpError(400, "Insufficient funds!", {
                 headers: {
@@ -142,12 +151,10 @@ app.post("/submitTransactionForm", isLoggedIn, async (req, res, next) => {
         user = req.session.user.username
     }
 
-    //Insert into securities table if not exist
-    await db.helpers.addSecurities(ticker_symbol, ticker_class, ticker_currency)
-
     //Call Polygon api to check if symbol is valid
-    let data = await api.polygonApiHelpers.getStockOpenClose(ticker_symbol, date)
-    if (data.status == "NOT_FOUND" || data.status == "ERROR") {
+    const today = moment(new Date()).format("YYYY-MM-DD")
+    let data = await api.polygonApiHelpers.getStockSnapshot(ticker_symbol)
+    if (data.tickers.length == 0 || data.status == "ERROR") {
         const error = createHttpError(406, "Invalid Symbol!", {
             headers: {
                 "X-Custom-Header": "Value"
@@ -156,11 +163,14 @@ app.post("/submitTransactionForm", isLoggedIn, async (req, res, next) => {
         return next(error);
     }
 
+    //Insert into securities table if not exist
+    await db.helpers.addSecurities(ticker_symbol, ticker_class, "USD")
+
     //Check if we have this ticker closing price cached in DB
     let p = await db.helpers.getSecurityHistory(ticker_symbol, date)
     if(JSON.stringify(p) === '[]') {
         //Add into DB for cache
-        p = await db.helpers.addSecurityHistory(ticker_symbol, date, data.open, data.close)
+        p = await db.helpers.addSecurityHistory(ticker_symbol, date, data.tickers[0].day.o, data.tickers[0].day.c)
     }
 
     let user_holding = await db.helpers.getUserHolding(user, ticker_symbol)
@@ -171,18 +181,22 @@ app.post("/submitTransactionForm", isLoggedIn, async (req, res, next) => {
     //If no CASH entry create one
     if(JSON.stringify(user_holding_cash) === '[]') {
         //Initialize new entry - for cash
-        user_holding = await db.helpers.addUserHolding(user, "USD", 1, 0, ticker_currency)
+        user_holding_cash = await db.helpers.addUserHolding(user, "USD", 1, 0, "USD")
     }
 
     //User does not hold this symbol yet
     if(JSON.stringify(user_holding) === '[]') {
         //Initialize new entry - update on buy/sell later
-        user_holding = await db.helpers.addUserHolding(user, ticker_symbol, 0, 0, ticker_currency)
+        user_holding = await db.helpers.addUserHolding(user, ticker_symbol, 0, 0, "USD")
     }
 
     //Do profit/loss calculation
     let profit = 0; //positive number
     let loss = 0; //nagtive number
+    if(ticker_currency == "CAD") {
+        price = Number((price / 1.36).toFixed(2));
+    }
+    console.log("price: " + price )
     let value = (quantity * price) - (quantity * p[0].price_close); //user bought price - closing price in DB
     console.log("value: " + value )
     let current_quantity = Number(user_holding[0].quantity);
@@ -201,7 +215,7 @@ app.post("/submitTransactionForm", isLoggedIn, async (req, res, next) => {
             let new_quantity = current_quantity + quantity;
             console.log("form quantity: " + typeof quantity )
             console.log("current quantity: " + typeof current_quantity)
-            let new_cost_basis = ((current_cost_basis*current_quantity) + (price*quantity)) / new_quantity;
+            let new_cost_basis = (((current_cost_basis*current_quantity) + (price*quantity)) / new_quantity).toFixed(2);
             console.log("New cost basis: " + new_cost_basis)
 
             let user_holding_buy = await db.helpers.updateUserHolding(user, ticker_symbol, new_quantity, new_cost_basis)
@@ -248,8 +262,8 @@ app.get("/ranking", isLoggedIn, async (req, res, next) => {
         
     });
 
-    //yesterday date, api limited to the day before
-    const yesterday = moment(new Date(new Date().setDate(new Date().getDate()-1))).format("yyyy-MM-DD")
+    //today date, api limited to the day before
+    const today = moment(new Date()).format("YYYY-MM-DD")
 
     for (var userIndex in usersArray){
         var userid = usersArray[userIndex].userid;
@@ -268,25 +282,14 @@ app.get("/ranking", isLoggedIn, async (req, res, next) => {
         for (const symbolIndex in holdingsArray) {
             var symbol = holdingsArray[symbolIndex].symbol;
 
-            if(symbol !== 'USD') {
-                var yesterdayClosing = await db.helpers.getSecurityHistory(symbol, yesterday)
-                //Do not have the closing price in cache yet, call api
-                if(JSON.stringify(yesterdayClosing) === '[]') {
-                    let data = await api.polygonApiHelpers.getStockOpenClose(symbol, yesterday)
-                    //Run of of credits, will create security history closing price entry of value 0
-                    if (data.status == "NOT_FOUND" || data.status == "ERROR") {
-                        const error = createHttpError(500, "Internal Server error, out of credits", {
-                            headers: {
-                                "X-Custom-Header": "Value"
-                            }
-                        });
-                        return next(error);
-                    } 
+            if(symbol !== 'USD' && symbol !== 'CAD') {
+                var todayClosing = await db.helpers.getSecurityHistory(symbol, today)
 
-                    p = await db.helpers.addSecurityHistory(symbol, yesterday, data.open, data.close)
-                    yesterdayClosing = await db.helpers.getSecurityHistory(symbol, yesterday)
-                }
-                let closingPrice = Number(yesterdayClosing[0].price_close)
+                let data = await api.polygonApiHelpers.getStockSnapshot(symbol)
+                p = await db.helpers.addSecurityHistory(symbol, today, data.tickers[0].day.o, data.tickers[0].day.c)
+                todayClosing = await db.helpers.getSecurityHistory(symbol, today)
+
+                let closingPrice = Number(data.tickers[0].day.c)
 
                 const userHolding = await db.helpers.getUserHolding(userid, symbol)
                 let quantity = Number(userHolding[0].quantity);

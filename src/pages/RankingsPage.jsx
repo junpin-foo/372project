@@ -42,6 +42,7 @@ export default function RankingsPage() {
 
             <header>
                 <h1 className="text-center">User Rankings</h1>
+                <h6 className="text-center"> Ranked by unrealized profit or loss</h6>
             </header>
 
             {!isLoading ?
