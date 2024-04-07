@@ -88,27 +88,33 @@ export default function ManagerPage() {
                         return (
                                 <ul className='userCell' key={user.userid}>
                                     <p className='uid'>{user.userid}</p>
-                                    <button className='view' key={user.userid} data-uid={user.userid} onClick={displayModal}>View holdings</button>
+                                    <button className='view' key={user.userid} data-uid={user.userid} onClick={displayModal}>View</button>
                                 </ul>
                                 
                         )
                     })}
                 </div>
             </div>
-            <Modal show={modalVisible} hideModal={() => setModalVisbility(false)}>
-                <h2>User Details: {modal.username}</h2>
-                {
-                    modal.symbols.length > 1 ?
-                        <div>
-                            <StatisticsView holdings={modal.symbols} />
-                            <UserHoldingsList symbols={modal.symbols} setSymbols={null} username={null}/>
-                        </div>
-                    :   <p>User has no holdings.</p>
-                }
-                {
-                    <TransactionForm updateUserHoldingsList={getManagedUserHoldings} onBehalfOf={modal.username} symbols={null} setSymbols={null}/>
-                }
-            </Modal>
+            <div className='managerModal'>
+                <Modal show={modalVisible} hideModal={() => setModalVisbility(false)}>
+                    <h2>User Details: {modal.username}</h2>
+                    {
+                        modal.symbols.length > 1 ?
+                            <div>
+                                <div className='modalCell'>
+                                    <StatisticsView holdings={modal.symbols} />
+                                </div>
+                                <div className='modalCell'>
+                                    <UserHoldingsList symbols={modal.symbols} setSymbols={null} username={null}/>
+                                </div>
+                            </div>
+                        :   <p>User has no holdings.</p>
+                    }
+                    <div className='modalCell'>
+                        <TransactionForm className='TransactionForm' updateUserHoldingsList={getManagedUserHoldings} onBehalfOf={modal.username} symbols={null} setSymbols={null}/>
+                    </div>
+                </Modal>
+            </div>
         </main>
     );
 }

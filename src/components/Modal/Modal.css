@@ -7,7 +7,27 @@
     z-index: 1;
     background: rgba(0, 0, 0, 0.6);
 }
-  
+
+.modal .modalClose{
+    position: fixed;
+    top: 4%;
+    left: 80%;
+    background-color: maroon;
+    border: black solid 1px;
+    border-radius: 4px;
+    height: 2.5vw;
+    width: 2.5vw;
+    z-index: 2;
+}
+.modalClose span{
+    position: relative;
+    top: -3.25px;
+    /* left: -.1px; */
+    color: white;
+    font-weight: bolder;
+    font-size: 1.55vw;
+    z-index: 2;
+}
 .modalContent {
     border: black solid 1px;
     border-radius: 1em;
@@ -16,12 +36,14 @@
     width: 70%;
     max-height: 90%;
     overflow-y: auto;
-    top: 50px;
+    top: 3%;
     left: 15%;
     padding: 2em;
     box-sizing: border-box;
 }
-  
+
+
+
 .display-block {
     display: block;
 }
