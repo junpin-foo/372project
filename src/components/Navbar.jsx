@@ -26,7 +26,7 @@ export default function Navbar() {
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
-                <Link className="navbar-brand" to="/">Project</Link>
+                <Link className="navbar-brand" to="/">Portfolio Tracker</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -39,6 +39,7 @@ export default function Navbar() {
                         }
                         {/* <Link to="/dashboard" className="nav-link" href="#">Dashboard</Link> */}
                         <Link to={{pathname: "/rankings"}} state={state} className="nav-link" href="#">Rankings</Link>
+                        <Link to={{pathname: "/quotes"}} state={state} className="nav-link" href="#">Quotes</Link>
                     </div>
                 </div>
 

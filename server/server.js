@@ -7,6 +7,7 @@ const session = require('express-session')
 const createHttpError = require("http-errors");
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
+const helpers = require('./models/helpers')
 
 const app = express()
 
@@ -84,7 +85,7 @@ app.post('/login', async(req,res) => {
     }
 })
 
-app.post("/submitMoneyForm", isLoggedIn, async (req, res, next) => {
+app.post("/submitMoneyForm",isLoggedIn, async (req, res, next) => {
     //User form data
     let transaction = req.body.transaction //withdraw / deposit
     let currency = req.body.currency
@@ -96,7 +97,8 @@ app.post("/submitMoneyForm", isLoggedIn, async (req, res, next) => {
 
     //Covert CAD to USD
     if(currency == "CAD") {
-        amount = Number((amount / 1.36).toFixed(2));
+        exRate = await db.helpers.getExchangeRateFromTo("USD", "CAD")
+        amount = Number((amount / Number(exRate[0].rate)).toFixed(2));
     }
 
     //**Ensure cash is auto created when user created**
@@ -136,7 +138,7 @@ app.post("/submitMoneyForm", isLoggedIn, async (req, res, next) => {
     res.status(204).send();
 })
 
-app.post("/submitTransactionForm", isLoggedIn, async (req, res, next) => {
+app.post("/submitTransactionForm",isLoggedIn, async (req, res, next) => {
     //User form data
     let transaction = req.body.transaction //Bought OR Sold
     let ticker_symbol = req.body.tickerSymbol
@@ -147,7 +149,7 @@ app.post("/submitTransactionForm", isLoggedIn, async (req, res, next) => {
     let date = req.body.date
 
     let user;
-    if(req.session.user.role = "manager"){
+    if(req.session.user.role == "manager"){
         user = req.body.onBehalfOf
     }
     else{
@@ -197,7 +199,8 @@ app.post("/submitTransactionForm", isLoggedIn, async (req, res, next) => {
     let profit = 0; //positive number
     let loss = 0; //nagtive number
     if(ticker_currency == "CAD") {
-        price = Number((price / 1.36).toFixed(2));
+        exRate = await db.helpers.getExchangeRateFromTo("USD", "CAD")
+        price = Number((price / Number(exRate[0].rate)).toFixed(2));
     }
     console.log("price: " + price )
     let value = (quantity * price) - (quantity * p[0].price_close); //user bought price - closing price in DB
@@ -285,7 +288,7 @@ app.get("/ranking", isLoggedIn, async (req, res, next) => {
         for (const symbolIndex in holdingsArray) {
             var symbol = holdingsArray[symbolIndex].symbol;
 
-            if(symbol !== 'USD' && symbol !== 'CAD') {
+            if(symbol !== 'USD') {
                 var todayClosing = await db.helpers.getSecurityHistory(symbol, today)
 
                 let data = await api.polygonApiHelpers.getStockSnapshot(symbol)
@@ -298,7 +301,8 @@ app.get("/ranking", isLoggedIn, async (req, res, next) => {
                 let quantity = Number(userHolding[0].quantity);
                 let cost_basis = Number(userHolding[0].cost_basis);
                 
-                let value = (closingPrice - cost_basis) * quantity
+                let value = Number(((closingPrice - cost_basis) * quantity).toFixed(2))
+                console.log("value: " + value)
                 usersArray[objIndex].value += value;
             }
         };
@@ -311,6 +315,12 @@ app.get("/ranking", isLoggedIn, async (req, res, next) => {
 
     res.status(200).json(usersArray)
 
+})
+
+app.post("/quote", async (req, res) => {
+    let symbol = req.body.tickerSymbol
+    let data = await api.polygonApiHelpers.getStockSnapshot(symbol)
+    res.json(data)
 })
 
 app.get('/currency/list', isLoggedIn,  async (req, res) => {
@@ -332,6 +342,19 @@ app.get('/user/holdings', isLoggedIn, async (req, res) => {
         user = req.session.user.username
     }
     const data = await db.helpers.getAllUserHoldings(user)
+
+    for (const i in data) {
+        const latest = helpers.getDateYYYYMMDD(new Date())
+
+        const stockOpenClose = await api.polygonApiHelpers.getStockOpenClose(data[i].symbol, latest)
+        console.log("STOCK OPEN CLOSE:", stockOpenClose)
+
+        data[i].close = stockOpenClose.close
+        data[i].open = stockOpenClose.open
+        data[i].high = stockOpenClose.high
+        data[i].low = stockOpenClose.low
+    }
+    console.log("New User holdings:", data)
     res.status(200).json(data)
 })
 

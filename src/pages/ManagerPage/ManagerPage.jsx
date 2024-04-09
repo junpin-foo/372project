@@ -1,6 +1,6 @@
 import Navbar from '../../components/Navbar';
 import TransactionForm from '../../components/transactionForm';
-import UserHoldingsList from '../../components/UserHoldingsList';
+import UserHoldingsList from '../../components/UserHoldingsList/UserHoldingsList';
 import Modal from '../../components/Modal/Modal';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';

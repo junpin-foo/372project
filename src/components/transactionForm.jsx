@@ -54,8 +54,8 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList, onBehalf
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: onBehalfOf === undefined ? 
-                    JSON.stringify(formData) : 
+                body: onBehalfOf === undefined ?
+                    JSON.stringify(formData) :
                     JSON.stringify({
                         ...formData,
                         onBehalfOf: onBehalfOf
@@ -95,7 +95,7 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList, onBehalf
         <div>
             <h2>Stock Purchase Form</h2>
             <form id="transactiom-form" onSubmit={handleSubmit}>
-                <div class="nice-form-group">
+                <div className="nice-form-group">
                     <label htmlFor="transaction">Transaction:</label>
                     <select
                         id="transaction"
@@ -108,7 +108,7 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList, onBehalf
                         <option value="sell">Sell</option>
                     </select>
                 </div>
-                <div class="nice-form-group">
+                <div className="nice-form-group">
                     <label htmlFor="tickerSymbol">Symbol:</label>
                     <input
                         type="text"
@@ -119,7 +119,7 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList, onBehalf
                         required
                     />
                 </div>
-                <div class="nice-form-group"> 
+                <div className="nice-form-group"> 
                     <label htmlFor="tickerClass">Class:</label>
                     <select
                         type="text"
@@ -134,7 +134,7 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList, onBehalf
                         <option value="cash">cash</option>
                     </select>
                 </div>
-                <div class="nice-form-group">
+                <div className="nice-form-group">
                     <label htmlFor="tickerCurrency">Currency:</label>
                     <select
                         type="text"
@@ -148,7 +148,7 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList, onBehalf
                         <option value="CAD">CAD</option>
                     </select>
                 </div>
-                <div class="nice-form-group">
+                <div className="nice-form-group">
                     <label htmlFor="quantity">Quantity:</label>
                     <input
                         type="number"
@@ -159,7 +159,7 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList, onBehalf
                         required
                     />
                 </div>
-                <div class="nice-form-group">
+                <div className="nice-form-group">
                     <label htmlFor="price">Price:</label>
                     <input
                         type="number"
@@ -171,7 +171,7 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList, onBehalf
                         required
                     />
                 </div>
-                <div class="nice-form-group">
+                <div className="nice-form-group">
                     <label htmlFor="date">Date:</label>
                     {/* <input
                         type="date"
@@ -192,8 +192,8 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList, onBehalf
                         filterDate={isDisabled}
                     />
                 </div>
-                <div class="nice-form-group">
-                    <button type="submit">Submit</button>
+                <div className="nice-form-group">
+                    <button className="btn btn-success" type="submit">Submit</button>
                 </div>
             </form>
             {submitStatus.success && <p id="mydiv">Form submitted successfully!</p>}

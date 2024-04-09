@@ -152,6 +152,12 @@ const helpers = {
         const res_userHolding = await pool.query(sql_userHolding)
         return res_userHolding.rows
     },
+
+    getExchangeRateFromTo: async function(from, to) {
+        const sql_exchangerate = 'SELECT rate FROM exchange_rate WHERE currency_from=$1 AND currency_to=$2'
+        const res_exchangerate = await pool.query(sql_exchangerate, [from, to])
+        return res_exchangerate.rows
+    },
 }
 
 module.exports = { helpers }
