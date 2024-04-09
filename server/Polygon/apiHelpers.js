@@ -19,7 +19,7 @@ const polygonApiHelpers = {
 
         async function callOpenCloseApi(symbol, day) {
             try {
-                console.log('API call:', symbol);
+                // console.log('API call:', symbol);
                 const response = await fetch(`https://api.polygon.io/v1/open-close/${symbol}/${day}?apiKey=${API_KEY}`);
                 const data = await response.json();
                 return data;
@@ -37,7 +37,7 @@ const polygonApiHelpers = {
             data = await callOpenCloseApi(symbol, day);
           }
           //Get last snapshot closing price 
-          console.log('API call returned:', data);
+        //   console.log('API call returned:', data);
           return data;
         } catch (error) {
           console.error('Error:', error);
@@ -90,7 +90,7 @@ const polygonApiHelpers = {
 
       async function callSnapshotApi(symbol) {
           try {
-              console.log('API call:', symbol);
+            //   console.log('API call:', symbol);
               const response = await fetch(`https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers?tickers=${symbol}&apiKey=${API_KEY}`);
               const data = await response.json();
               return data;
@@ -108,7 +108,7 @@ const polygonApiHelpers = {
           data = await callSnapshotApi(symbol);
         }
         //Get last snapshot closing price 
-        console.log('API call returned:', JSON.stringify(data));
+        // console.log('API call returned:', JSON.stringify(data));
         return data;
       } catch (error) {
         console.error('Error:', error);
