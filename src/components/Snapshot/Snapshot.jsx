@@ -51,7 +51,6 @@ export default function Snapshot() {
 
     return (
         <div>
-            <h2>Get Quote:</h2>
             <form className="quoteForm" onSubmit={handleSubmit}>
                 <div class="nice-form-group">
                     <label htmlFor="tickerSymbol">Symbol:</label>
@@ -65,23 +64,35 @@ export default function Snapshot() {
                     />
                 </div>
                 <div class="nice-form-group">
-                    <button type="submit">Submit</button>
+                    <button className="btn btn-success" type="submit">Submit</button>
                 </div>
             </form>
             {
                 quote == undefined ?
                 <div></div> : quote.error ?
                     <div>{quote.error}</div>
-                    :<div className='quoteResult'>
-                        <h3>Snapshot: {quote.ticker}</h3>
-                        <ul>
-                            <li>Change: {quote.todaysChangePerc.toPrecision(decimalPrecision)}%</li>
-                            <li>Open: {quote.day.o}</li>
-                            <li>High: {quote.day.h}</li>
-                            <li>Low: {quote.day.l}</li>
-                            <li>Close: {quote.day.c}</li>
-                            <li>Last updated: {new Date(quote.updated / 1000000).toLocaleString()}</li> {/*ns to ms, UTC epoch*/}
-                        </ul>
+                    :<div className='quoteResult pt-5'>
+                         <h3 className="h1">Snapshot: {quote.ticker}</h3>
+                         <ul className="list-group">
+                             <li className="list-group-item">
+                                 <strong>Change:</strong> {quote.todaysChangePerc.toPrecision(decimalPrecision)}%
+                             </li>
+                             <li className="list-group-item">
+                                 <strong>Open:</strong> {quote.day.o}
+                             </li>
+                             <li className="list-group-item">
+                                 <strong>High:</strong> {quote.day.h}
+                             </li>
+                             <li className="list-group-item">
+                                 <strong>Low</strong>: {quote.day.l}
+                             </li>
+                             <li className="list-group-item">
+                                 <strong>Close</strong>: {quote.day.c}
+                             </li>
+                             <li className="list-group-item">
+                                 <strong>Last updated</strong>: {new Date(quote.updated / 1000000).toLocaleString()}
+                             </li> {/*ns to ms, UTC epoch*/}
+                         </ul>
                     </div>
             }
         </div>
