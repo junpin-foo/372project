@@ -38,7 +38,7 @@ function isLoggedIn(req, res, next) {
     if (req.session.user) {
         next()
     }
-    res.send("403: Access Forbidden")
+    
 }
 app.get('/getAllUsers', async(req,res) => {
     var users = (await db.helpers.getAllUsers())
