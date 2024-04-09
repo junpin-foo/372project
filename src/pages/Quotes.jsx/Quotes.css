@@ -1,0 +1,12 @@
+.Quotes{
+    padding: 2em;
+}
+.Quotes .Snapshot{
+    display: block;
+    /* width: 200px; */
+    border: black solid 1px;
+    padding: .75em;
+    margin-top: .5em;
+    margin-bottom: .5em;
+    border-radius: 6px;
+}

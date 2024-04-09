@@ -8,6 +8,7 @@ import RankingsPage from './pages/RankingsPage';
 import SignUp from './pages/SignUpPage';
 
 import './index.css';
+import Quotes from './pages/Quotes.jsx/Quotes';
 
 // Function to check if a user is logged in 
 const PrivateRoutes = ({ loggedIn, ...rest }) => {
@@ -28,6 +29,7 @@ function App() {
                     <Route path="/manager" element={<ManagerPage />} />
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/rankings" element={<RankingsPage />} />
+                    <Route path="/quotes" element={<Quotes />} />
                 </Route>
                 <Route path="/" element={<HomePage setLoggedIn={setLoggedIn} />} />
                 <Route path="/signup" element={<SignUp/>} />
