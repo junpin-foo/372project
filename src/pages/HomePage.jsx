@@ -53,7 +53,7 @@ export default function HomePage({ setLoggedIn }) {
 
         <form>
           <div className="mb-3" className="nice-form-group">
-            <label htmlFor="email" className="form-label">Email address</label>
+            <label htmlFor="email" className="form-label">Username</label>
             <input type="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
           </div>
 

@@ -36,13 +36,11 @@ app.use(session({
 function isLoggedIn(req, res, next) {
     if (req.session.user) {
         next()
-    } else {
-        res.redirect('/')
     }
+    res.send("403: Access Forbidden")
 }
 app.get('/getAllUsers', async(req,res) => {
-    var users = (await db.helpers.getAllUsers("user"))
-
+    var users = (await db.helpers.getAllUsers())
     res.json(users)
 })
 
@@ -51,7 +49,12 @@ app.post('/signup', async(req,res) => {
     const password = req.body.password;
     const manager = req.body.manager;
     const role = req.body.role;
-    var users = (await db.helpers.addUser(username, role,password,manager))
+    
+    if (manager == ""){
+        (await db.helpers.addUserNoManager(username, role,password,manager))
+    }else{
+        (await db.helpers.addUser(username, role,password,manager))
+    }
 
     res.status(200).json({ message: 'Signup successful' }); 
 })
