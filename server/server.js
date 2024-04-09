@@ -38,6 +38,7 @@ function isLoggedIn(req, res, next) {
     if (req.session.user) {
         next()
     }
+    
 }
 app.get('/getAllUsers', async(req,res) => {
     var users = (await db.helpers.getAllUsers())
