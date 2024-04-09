@@ -64,12 +64,12 @@ export default function SignUp({  }) {
 
         <form>
           <div className="mb-3" class="nice-form-group">
-            <label htmlFor="email" className="form-label">Email address</label>
+            <label htmlFor="email" className="form-label">Username</label>
             <input type="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
           </div>
 
           <div className="mb-3" class="nice-form-group">
-            <label htmlFor="role" className="form-label">role</label>
+            <label htmlFor="role" className="form-label">Role</label>
             <select type="text" className="form-control" id="role" value={role} onChange={(e) => setRole(e.target.value)} required>
             <option value="">Select an Role</option>
             <option value="user">user</option>
