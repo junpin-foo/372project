@@ -10,7 +10,7 @@ export default function StatisticsView({holdings}){
     let baseCurrency = "USD"
     const getCurrencyList = () => {
         axios.defaults.withCredentials = true;
-        axios.get(backEndpoint + 'currency/list')
+        axios.get(backEndpoint + 'currency/list', {withCredentials:true})
             .then(response => {
                 const data = response.data.map(({code}) => code)
                 setCurrencies(data);

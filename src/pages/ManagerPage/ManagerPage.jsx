@@ -1,6 +1,6 @@
 import Navbar from '../../components/Navbar';
 import TransactionForm from '../../components/transactionForm';
-import UserHoldingsList from '../../components/UserHoldingsList';
+import UserHoldingsList from '../../components/UserHoldingsList/UserHoldingsList';
 import Modal from '../../components/Modal/Modal';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -17,7 +17,7 @@ export default function ManagerPage() {
     function getManagedUsersList() {
         axios.defaults.withCredentials = true;
 
-        axios.get(backEndpoint + 'manager/managedUsers')
+        axios.get(backEndpoint + 'manager/managedUsers', {withCredentials:true})
             .then(response => {
                 const data = response.data
                 setManagedUsers(data);
