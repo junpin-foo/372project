@@ -59,7 +59,7 @@ function MoneyForm({ symbols, setSymbols, updateUserHoldingsList }) {
 
     return (
         <div>
-            <h2>Depost/withdrawal Form</h2>
+            <h2>Deposit/Withdraw</h2>
             <form id="money-form" onSubmit={handleSubmit}>
                 <div class="nice-form-group">
                     <label htmlFor="transaction">Transaction:</label>
@@ -100,7 +100,7 @@ function MoneyForm({ symbols, setSymbols, updateUserHoldingsList }) {
                     />
                 </div>
                 <div class="nice-form-group">
-                    <button type="submit">Submit</button>
+                    <button className="btn btn-success" type="submit">Submit</button>
                 </div>
             </form>
             {submitStatus.success && <p>Form submitted successfully!</p>}

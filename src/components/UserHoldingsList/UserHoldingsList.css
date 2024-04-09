@@ -1,0 +1,40 @@
+.user-holdings-list {
+  list-style: none;
+  margin-bottom: 2rem;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, min(20rem, 100%));
+  gap: 1rem;
+}
+
+.user-holdings-list-item {
+  border: 2px solid #eee;
+  border-radius: 1rem;
+  box-shadow: 0rem 0.1rem 0.4rem #eee;
+}
+
+.user-holdings-list-item-header {
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+  background: #eee;
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1ch;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.user-holdings-list-item-title {
+  margin: 0;
+  padding: 0;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.user-holdings-list-item-content {
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+}

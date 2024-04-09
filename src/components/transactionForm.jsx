@@ -54,8 +54,8 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList, onBehalf
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: onBehalfOf === undefined ? 
-                    JSON.stringify(formData) : 
+                body: onBehalfOf === undefined ?
+                    JSON.stringify(formData) :
                     JSON.stringify({
                         ...formData,
                         onBehalfOf: onBehalfOf
@@ -193,7 +193,7 @@ function TransactionForm({ symbols, setSymbols, updateUserHoldingsList, onBehalf
                     />
                 </div>
                 <div class="nice-form-group">
-                    <button type="submit">Submit</button>
+                    <button className="btn btn-success" type="submit">Submit</button>
                 </div>
             </form>
             {submitStatus.success && <p id="mydiv">Form submitted successfully!</p>}
