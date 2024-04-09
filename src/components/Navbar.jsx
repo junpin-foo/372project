@@ -39,6 +39,7 @@ export default function Navbar() {
                         }
                         {/* <Link to="/dashboard" className="nav-link" href="#">Dashboard</Link> */}
                         <Link to={{pathname: "/rankings"}} state={state} className="nav-link" href="#">Rankings</Link>
+                        <Link to={{pathname: "/quotes"}} state={state} className="nav-link" href="#">Quotes</Link>
                     </div>
                 </div>
 

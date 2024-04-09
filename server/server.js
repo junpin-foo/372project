@@ -313,6 +313,12 @@ app.get("/ranking", isLoggedIn, async (req, res, next) => {
 
 })
 
+app.post("/quote", async (req, res) => {
+    let symbol = req.body.tickerSymbol
+    let data = await api.polygonApiHelpers.getStockSnapshot(symbol)
+    res.json(data)
+})
+
 app.get('/currency/list', isLoggedIn,  async (req, res) => {
     const data = await db.helpers.getCurrencyList()
     res.status(200).json(data)
