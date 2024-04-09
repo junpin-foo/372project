@@ -23,12 +23,16 @@ export default function UserHoldingsList({ setSymbols, symbols, username }) {
                 {symbols.filter(({symbol}) => symbol !== 'USD' && symbol !== 'CAD').map(symbol => (
                     <li className="user-holdings-list-item" key={symbol.symbol}>
                         <div className="user-holdings-list-item-header">
-                            {symbol.symbol !== "USD" && symbol.symbol !== "CAD" && <span>{symbol.quantity}x</span>}
+                            <span>{symbol.quantity}x</span>
                             <h3 className="user-holdings-list-item-title">{symbol.symbol}</h3>
                         </div>
                         <div className="user-holdings-list-item-content">
                             <ul>
                                 <li>Average Cost: ${symbol.cost_basis} {symbol.currency}</li>
+                                <li>Closing Price: ${symbol.open}</li>
+                                <li>Opening Price: ${symbol.close}</li>
+                                <li>High: ${symbol.open}</li>
+                                <li>Low: ${symbol.close}</li>
                             </ul>
                         </div>
                     </li>

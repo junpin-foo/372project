@@ -7,6 +7,7 @@ const session = require('express-session')
 const createHttpError = require("http-errors");
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
+const helpers = require('./models/helpers')
 
 const app = express()
 
@@ -338,6 +339,19 @@ app.get('/user/holdings', isLoggedIn, async (req, res) => {
         user = req.session.user.username
     }
     const data = await db.helpers.getAllUserHoldings(user)
+
+    for (const i in data) {
+        const latest = helpers.getDateYYYYMMDD(new Date())
+
+        const stockOpenClose = await api.polygonApiHelpers.getStockOpenClose(data[i].symbol, latest)
+        console.log("STOCK OPEN CLOSE:", stockOpenClose)
+
+        data[i].close = stockOpenClose.close
+        data[i].open = stockOpenClose.open
+        data[i].high = stockOpenClose.high
+        data[i].low = stockOpenClose.low
+    }
+    console.log("New User holdings:", data)
     res.status(200).json(data)
 })
 
