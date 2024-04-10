@@ -12,16 +12,16 @@ export default function SignUp({  }) {
   const navigate = useNavigate();
 
   const backEndpoint = 'http://localhost:3001/';
-  useEffect(() =>{
-    axios.get(backEndpoint + "getAllUsers", {withCredentials:true})
-      .then(response => {
+  // useEffect(() =>{
+  //   axios.get(backEndpoint + "getAllUsers", {withCredentials:true})
+  //     .then(response => {
 
-        setItems(response.data)
-      })
-      .catch(error => {
+  //       setItems(response.data)
+  //     })
+  //     .catch(error => {
 
-      });
-  })
+  //     });
+  // })
 
   const handleSignup = (event) => {
     event.preventDefault();
@@ -84,12 +84,12 @@ export default function SignUp({  }) {
 
           <div className="mb-3" class="nice-form-group">
             <label htmlFor="manager" className="form-label">Manager</label>
-            <select type="text" className="form-control" id="manager" value={manager} onChange={handleDropdownChange} required>
-            <option value="">Select an Manager</option>
+            <input type="text" className="form-control" id="manager" value={manager} onChange={(e) => setManager(e.target.value)}  required/>
+            {/* <option value="">Select an Manager</option>
                 {items.map((item, index) => (
                     <option key={index} value={item.userid}>{item.userid}</option>
                   ))}
-            </select>
+            </select> */}
           </div>
 
           <button onClick={handleSignup} className="btn">Sign Up</button>
