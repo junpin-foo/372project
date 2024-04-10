@@ -10,8 +10,4 @@ Eric Chen: Database & Deployment
 
 
 # .env File
-POLYGON_API_KEY=gxmOGOSNjfhqeOy9OMPbNtTM4o4lupYI
-INSTANCE_CONNECTION_NAME=sfu-cmpt372-24spring-project:us-central1:project-pg
-DB_USER=postgres
-DB_PASS=root
-DB_NAME=postgres
+Details on what to include in the .env file is in the submitted Final Project Document.
