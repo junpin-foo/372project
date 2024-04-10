@@ -139,7 +139,7 @@ const helpers = {
         return res_userHolding.rows
     },
 
-    addUserNoManager: async function(userid,role, pass) {
+    addUserNoManager: async function(userid, role, pass) {
         let pool = await getPool();
         const sql_userHolding = 'INSERT INTO users (userid, role_name, password_hash) VALUES ($1, $2, $3) RETURNING *'
         const res_userHolding = await pool.query(sql_userHolding, [userid, role, pass])
