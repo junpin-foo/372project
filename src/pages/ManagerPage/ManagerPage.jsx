@@ -99,7 +99,7 @@ export default function ManagerPage() {
                 <Modal show={modalVisible} hideModal={() => setModalVisbility(false)}>
                     <h2>User Details: {modal.username}</h2>
                     {
-                        modal.symbols.length > 1 ?
+                        modal.symbols.length > 0 ?
                             <div>
                                 <div className='modalCell'>
                                     <StatisticsView holdings={modal.symbols} />
