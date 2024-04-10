@@ -88,7 +88,7 @@ export default function ManagerPage() {
                         return (
                                 <ul className='userCell' key={user.userid}>
                                     <p className='uid'>{user.userid}</p>
-                                    <button className='view' key={user.userid} data-uid={user.userid} onClick={displayModal}>View</button>
+                                    <button className='btn btn-primary view' key={user.userid} data-uid={user.userid} onClick={displayModal}>View</button>
                                 </ul>
                                 
                         )
