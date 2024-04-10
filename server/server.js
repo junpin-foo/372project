@@ -52,7 +52,7 @@ app.post('/signup', async(req,res) => {
     const role = req.body.role;
     
     if (manager == ""){
-        (await db.helpers.addUserNoManager(username, role,password,manager))
+        (await db.helpers.addUserNoManager(username, role, password))
     }else{
         (await db.helpers.addUser(username, role,password,manager))
     }
