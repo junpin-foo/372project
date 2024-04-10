@@ -4,14 +4,14 @@ export default function RankingsTable({ symbols }) {
             <thead>
                 <tr>
                     <th scope="col">User</th>
-                    <th scope="col">Unrealized Profit/Loss (USD)</th>
+                    <th scope="col">Unrealized Profit/Loss ($USD)</th>
                 </tr>
             </thead>
             <tbody>
                 {symbols.map(symbol => (
                     <tr key={symbol.userid}>
                         <td>{symbol.userid}</td>
-                        <td>${symbol.value}</td>
+                        <td>{symbol.value}</td>
                     </tr>
                 ))}
             </tbody>
