@@ -77,7 +77,7 @@ export default function ManagerPage() {
         <main>
             <Navbar isManager={true}/>
 
-            <div className='managerPage' /* className="dashboard container-fluid " */>
+            <div className='managerPage container' /* className="dashboard container-fluid " */>
                 <header className="dashboard-header">
                     <h1 className="text-center">Dashboard of Manager {username}</h1>
                 </header>
