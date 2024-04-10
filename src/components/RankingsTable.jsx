@@ -1,10 +1,10 @@
 export default function RankingsTable({ symbols }) {
     return (
-        <table class="container table">
+        <table class="table">
             <thead>
                 <tr>
                     <th scope="col">User</th>
-                    <th scope="col">Value</th>
+                    <th scope="col">Unrealized Profit/Loss ($USD)</th>
                 </tr>
             </thead>
             <tbody>

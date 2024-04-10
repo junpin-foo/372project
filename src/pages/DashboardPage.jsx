@@ -8,11 +8,13 @@ import { useState, useEffect } from 'react';
 
 export default function DashboardPage() {
     const [symbols, setSymbols] = useState([]);
+    const [isLoading, setLoading] = useState(false);
     const backEndpoint = 'http://localhost:3001/';
     const location = useLocation();
     const { username, role } = location.state || {};
 
     function updateUserHoldingsList() {
+        setLoading(true);
         axios.defaults.withCredentials = true;
 
         axios.get(backEndpoint + 'user/holdings', {withCredentials:true})
@@ -20,6 +22,7 @@ export default function DashboardPage() {
                 const data = response.data
                 console.log(data)
                 setSymbols(data);
+                setLoading(false);
             })
             .catch(error => {
                 console.error(error)
@@ -38,7 +41,7 @@ export default function DashboardPage() {
         <main>
             <Navbar />
 
-            <header className="container border-bottom border-5 dashboard-header">
+            <header className="container border-bottom border-5 text-center dashboard-header">
                 <h1>{username} ({formatUserRole(role)})</h1>
             </header>
 
@@ -52,8 +55,13 @@ export default function DashboardPage() {
                         </h2>
                         <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                             <div className="accordion-body">
-
-                                <UserHoldingsList symbols={symbols} setSymbols={setSymbols} username={username} />
+                                {!isLoading ?
+                                 <UserHoldingsList symbols={symbols} setSymbols={setSymbols} username={username} />
+                                 : <div className="container text-center mt-5">
+                                       <div className="spinner-border" role="status">
+                                           <span className="visually-hidden">Loading...</span>
+                                       </div>
+                                   </div>}
                             </div>
                         </div>
                     </div>

@@ -77,7 +77,7 @@ export default function ManagerPage() {
         <main>
             <Navbar isManager={true}/>
 
-            <div className='managerPage' /* className="dashboard container-fluid " */>
+            <div className='managerPage container' /* className="dashboard container-fluid " */>
                 <header className="dashboard-header">
                     <h1 className="text-center">Dashboard of Manager {username}</h1>
                 </header>
@@ -88,7 +88,7 @@ export default function ManagerPage() {
                         return (
                                 <ul className='userCell' key={user.userid}>
                                     <p className='uid'>{user.userid}</p>
-                                    <button className='view' key={user.userid} data-uid={user.userid} onClick={displayModal}>View</button>
+                                    <button className='btn btn-primary view' key={user.userid} data-uid={user.userid} onClick={displayModal}>View</button>
                                 </ul>
                                 
                         )
@@ -99,7 +99,7 @@ export default function ManagerPage() {
                 <Modal show={modalVisible} hideModal={() => setModalVisbility(false)}>
                     <h2>User Details: {modal.username}</h2>
                     {
-                        modal.symbols.length > 1 ?
+                        modal.symbols.length > 0 ?
                             <div>
                                 <div className='modalCell'>
                                     <StatisticsView holdings={modal.symbols} />
