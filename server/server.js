@@ -344,6 +344,7 @@ app.get('/user/holdings', isLoggedIn, async (req, res) => {
     }
     const data = await db.helpers.getAllUserHoldings(user)
 
+    // get open/close/high/low for all user stocks
     for (const i in data) {
         const latest = helpers.getDateYYYYMMDD(new Date())
 
@@ -355,12 +356,28 @@ app.get('/user/holdings', isLoggedIn, async (req, res) => {
         data[i].high = stockOpenClose.high
         data[i].low = stockOpenClose.low
     }
-    console.log("New User holdings:", data)
+
     res.status(200).json(data)
 })
 
 app.get('/manager/managedUsers', isLoggedIn, async (req, res) => {
     const _res = await db.helpers.getManagedUsers(req.session.user.username)
+
+    // get open/close/high/low for all user stocks
+    for (const i in _res) {
+        for (const j in _res[i]) {
+            const latest = helpers.getDateYYYYMMDD(new Date())
+
+            const stockOpenClose = await api.polygonApiHelpers.getStockOpenClose(_res[i][j].symbol, latest)
+            console.log("STOCK OPEN CLOSE:", stockOpenClose)
+
+            _res[i][j].close = stockOpenClose.close
+            _res[i][j].open = stockOpenClose.open
+            _res[i][j].high = stockOpenClose.high
+            _res[i][j].low = stockOpenClose.low
+        }
+    }
+
     res.status(200).json(_res)
 })
 
