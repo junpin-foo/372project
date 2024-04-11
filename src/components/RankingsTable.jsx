@@ -11,7 +11,7 @@ export default function RankingsTable({ symbols }) {
                 {symbols.map(symbol => (
                     <tr key={symbol.userid}>
                         <td>{symbol.userid}</td>
-                        <td>{symbol.value}</td>
+                        <td>{symbol.value.toFixed(2)}</td>
                     </tr>
                 ))}
             </tbody>
