@@ -6,7 +6,7 @@ export default function StatisticsView({holdings}){
     const [currencies, setCurrencies] = useState(["USD", "CAD"])
     const [stats, setStats] = useState({total: 0, cashVal: 0, secVal: 0, cashPct: 0, secPct: 0})
     const backEndpoint = 'http://localhost:3001/';
-    const decimalPrecision = 3;
+    const decimalPrecision = 2;
     let baseCurrency = "USD"
     const getCurrencyList = () => {
         axios.defaults.withCredentials = true;
@@ -64,11 +64,11 @@ export default function StatisticsView({holdings}){
         let secPct = secVal / total * 100
 
         return {
-            total: total.toPrecision(decimalPrecision),
-            cashVal: cashVal.toPrecision(decimalPrecision),
-            secVal: secVal.toPrecision(decimalPrecision),
-            cashPct: cashPct.toPrecision(decimalPrecision),
-            secPct: secPct.toPrecision(decimalPrecision)}
+            total: total.toFixed(decimalPrecision),
+            cashVal: cashVal.toFixed(decimalPrecision),
+            secVal: secVal.toFixed(decimalPrecision),
+            cashPct: cashPct.toFixed(decimalPrecision),
+            secPct: secPct.toFixed(decimalPrecision)}
     }
 
     useEffect(() => {
