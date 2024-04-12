@@ -1,5 +1,7 @@
 .Quotes{
     padding: 2em;
+    padding-left: 0;
+    padding-right: 0;
 }
 .Quotes .Snapshot{
     display: block;
@@ -8,4 +10,7 @@
     margin-top: .5em;
     margin-bottom: .5em;
     border-radius: 6px;
+
+    padding-left: 0;
+    padding-right: 0;
 }

@@ -1,0 +1,19 @@
+.app-sidebar {
+  position: fixed;
+  height: 100%;
+  width: 18rem;
+  background: #eee;
+  z-index: 99;
+}
+
+.app-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.app-nav-link {
+  display: block;
+  margin-left: 0;
+  margin-right: 0;
+}

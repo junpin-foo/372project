@@ -1,4 +1,4 @@
-export default function RankingsTable({ symbols }) {
+export default function RankingsTable({ symbols, username }) {
     return (
         <table class="table">
             <thead>
@@ -9,8 +9,12 @@ export default function RankingsTable({ symbols }) {
             </thead>
             <tbody>
                 {symbols.map(symbol => (
-                    <tr key={symbol.userid}>
-                        <td>{symbol.userid}</td>
+                    <tr key={symbol.userid}
+                        className={`${symbol.userid === username ? "table-primary" : ""}`}>
+                        <td>
+                            {symbol.userid === username ?
+                             <strong>{symbol.userid}</strong> : <>{symbol.userid}</>}
+                        </td>
                         <td>{symbol.value.toFixed(2)}</td>
                     </tr>
                 ))}
