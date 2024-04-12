@@ -1,12 +1,12 @@
 # Authors & Contributions
 
-Caleb Tong: Authentication
+Caleb Tong
 
-Jesse Huang: User Interface
+Jesse Huang
 
-JunPin Foo: API integration
+JunPin Foo
 
-Eric Chen: Database & Deployment
+Eric Chen
 
 
 # .env File
